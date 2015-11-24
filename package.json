@@ -1,0 +1,33 @@
+{
+  "name": "key-cache",
+  "version": "0.0.1",
+  "description": "以key形式的缓存文件",
+  "main": "lib/main.js",
+  "scripts": {
+    "check": "fecs check src/*.js",
+    "compile": "babel --loose all --stage 0 --modules common src/ --out-dir lib/",
+    "watch": "npm run compile -- --watch",
+    "start": "node test.js",
+    "prepublish": "npm run compile"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xuexb/key-cache.git"
+  },
+  "author": "xiaowu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xuexb/key-cache/issues"
+  },
+  "homepage": "https://github.com/xuexb/key-cache/",
+  "dependencies": {
+    "MD5": "^1.3.0",
+    "del": "^2.1.0",
+    "extend": "^3.0.0",
+    "mkdir-p": "0.0.7"
+  },
+  "devDependencies": {
+    "babel": "5.8.21",
+    "fecs": "^0.4.13"
+  }
+}
