@@ -10,8 +10,7 @@ import fs from 'fs';
 import extend from 'extend';
 import path from 'path';
 import md5 from 'MD5';
-import del from 'del';
-import mkdirp from 'mkdir-p';
+import extra from 'fs-extra';
 
 export default class {
     options = {
@@ -47,15 +46,8 @@ export default class {
         // 解析路径
         this.options.dir = path.resolve(this.options.dir);
 
-        // 创建目录
-        this._mkdir_cachepath();
-    }
-
-    /**
-     * 创建缓存目录
-     */
-    _mkdir_cachepath() {
-        mkdirp.sync(this.options.dir);
+        // 创建缓存目录
+        extra.mkdirsSync(this.options.dir);
     }
 
     /**
@@ -157,8 +149,7 @@ export default class {
     remove(key) {
         // 如果没有key则说明全部删除
         if (!key) {
-            del.sync(path.resolve(this.options.dir));
-            this._mkdir_cachepath();
+            extra.emptyDirSync(this.options.dir);
             return this;
         }
 
