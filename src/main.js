@@ -77,7 +77,12 @@ export default class {
         options = extend({}, this.options, options);
 
         // 记录写入日间
-        data.__time = Date.now();
+        if (options.timeout === null) {
+            data.__time = null;
+        }
+        else {
+            data.__time = Date.now();    
+        }
 
         // 判断文件类型
         if (options.type === 'json') {

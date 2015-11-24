@@ -1,6 +1,6 @@
 {
   "name": "key-cache",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "以key形式的缓存文件",
   "main": "lib/main.js",
   "scripts": {
