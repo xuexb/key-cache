@@ -65,7 +65,7 @@ export default class {
             data.__time = null;
         }
         else {
-            data.__time = Date.now();    
+            data.__time = Date.now();
             data.__end = options.timeout;
         }
 
