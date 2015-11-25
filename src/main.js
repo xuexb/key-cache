@@ -15,14 +15,6 @@ import extra from 'fs-extra';
 export default class {
     options = {
         /**
-         * 存放的缓存类型
-         *
-         * @default json
-         * @type {String}
-         */
-        type: 'json',
-
-        /**
          * 缓存目录
          *
          * @default 安装包里 dirname + .cache
@@ -68,17 +60,20 @@ export default class {
 
         options = extend({}, this.options, options);
 
-        // 记录写入日间
+        // 如果有过期时间则记录，否则忽略
         if (options.timeout === null) {
             data.__time = null;
         }
         else {
             data.__time = Date.now();    
+            data.__end = options.timeout;
         }
 
-        // 判断文件类型
-        if (options.type === 'json') {
-            data.__result = JSON.stringify(value);
+        data.__result = JSON.stringify(value);
+
+        // 如果配置的缓存目录不是初始的则创建该目录，防止出错
+        if (options.dir !== this.options.dir) {
+            extra.mkdirsSync(options.dir);
         }
 
         // 写入缓存
@@ -132,11 +127,12 @@ export default class {
 
         // 如果设置了时间并且过期了
         // 则删除这个缓存文件
-        if (filedata.__time !== null && Date.now() - filedata.__time > this.options.timeout * 1000) {
-            return this.remove(key);
+        if (filedata.__time !== null && Date.now() - filedata.__time > filedata.__end * 1000) {
+            this.remove(key);
+            return null;
         }
 
-        return this.options.type === 'json' ? JSON.parse(filedata.__result) : filedata.__result;
+        return JSON.parse(filedata.__result);
     }
 
     /**
