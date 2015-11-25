@@ -15,7 +15,7 @@ import extra from 'fs-extra';
 export default class {
     options = {
         /**
-         * 缓存目录
+         * 缓存目录，路径基于当前运行目录
          *
          * @default 安装包里 dirname + .cache
          * @type {String}
