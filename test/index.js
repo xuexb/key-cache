@@ -101,24 +101,24 @@ describe('key-cache', function () {
         }, 1001);
     });
 
-    it('get json parse error', function(){
+    it('get json parse error', function () {
         var cache = new Key_cache();
 
         // 重写获取路径
-        cache._get_filepath = function(){
+        cache._get_filepath = function () {
             return path.resolve(__dirname, './json/', 'parse-error.json');
-        }
+        };
 
         assert.strictEqual(null, cache.get());
     });
 
-    it('get json error', function(){
+    it('get json error', function () {
         var cache = new Key_cache();
 
         // 重写获取路径
-        cache._get_filepath = function(){
+        cache._get_filepath = function () {
             return path.resolve(__dirname, './json/', 'no-time.json');
-        }
+        };
 
         assert.strictEqual(null, cache.get());
     });
