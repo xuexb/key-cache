@@ -12,8 +12,8 @@ import path from 'path';
 import md5 from 'MD5';
 import extra from 'fs-extra';
 
-export default class {
-    options = {
+export default class Key_cache {
+    static options = {
         /**
          * 缓存目录，路径基于当前运行目录
          *
@@ -33,7 +33,7 @@ export default class {
 
     constructor(options = {}) {
         // 合并默认配置
-        this.options = extend({}, this.options, options);
+        this.options = extend({}, Key_cache.options, options);
 
         // 解析路径
         this.options.dir = path.resolve(this.options.dir);
@@ -120,7 +120,7 @@ export default class {
             return null;
         }
 
-        // 如果没有时间
+        // 如果没有时间就不是key-cache设置的，则忽略
         if (filedata.__time === undefined) {
             return null;
         }

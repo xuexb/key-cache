@@ -19,6 +19,17 @@ describe('key-cache', function () {
         cache.remove();
     });
 
+    it('new', function () {
+        try {
+            var key_cache = Key_cache;
+            key_cache();
+            assert.strictEqual(true, false);
+        }
+        catch (e) {
+            assert.strictEqual(true, true);
+        }
+    });
+
     // 判断只要写入文件就算成功
     it('options.dir', function () {
         var filepath = './test/temp/.' + Date.now();
@@ -28,22 +39,6 @@ describe('key-cache', function () {
 
         // 写入文件
         cache2.set('test', 1);
-
-        // 目录必须存在，并且里面文件必须有1个
-        assert.strictEqual(true, fs.existsSync(filepath) && fs.readdirSync(filepath).length === 1);
-
-        // 删除目录
-        extra.removeSync('./test/temp');
-    });
-
-    // 判断只要写入文件就算成功
-    it('set(key, value, {dir: ""})', function () {
-        var filepath = './test/temp/.' + Date.now();
-
-        // 写入文件
-        cache.set('test', 1, {
-            dir: filepath
-        });
 
         // 目录必须存在，并且里面文件必须有1个
         assert.strictEqual(true, fs.existsSync(filepath) && fs.readdirSync(filepath).length === 1);
@@ -72,6 +67,22 @@ describe('key-cache', function () {
         }, 1001);
     });
 
+    // 判断只要写入文件就算成功
+    it('set(key, value, {dir: ""})', function () {
+        var filepath = './test/temp/.' + Date.now();
+
+        // 写入文件
+        cache.set('test', 1, {
+            dir: filepath
+        });
+
+        // 目录必须存在，并且里面文件必须有1个
+        assert.strictEqual(true, fs.existsSync(filepath) && fs.readdirSync(filepath).length === 1);
+
+        // 删除目录
+        extra.removeSync('./test/temp');
+    });
+
     it('set(key, value, {timeout: ""})', function (done) {
         cache.set('test', 1, {
             timeout: 1
@@ -88,6 +99,28 @@ describe('key-cache', function () {
             assert.strictEqual(null, cache.get('test'));
             done();
         }, 1001);
+    });
+
+    it('get json parse error', function(){
+        var cache = new Key_cache();
+
+        // 重写获取路径
+        cache._get_filepath = function(){
+            return path.resolve(__dirname, './json/', 'parse-error.json');
+        }
+
+        assert.strictEqual(null, cache.get());
+    });
+
+    it('get json error', function(){
+        var cache = new Key_cache();
+
+        // 重写获取路径
+        cache._get_filepath = function(){
+            return path.resolve(__dirname, './json/', 'no-time.json');
+        }
+
+        assert.strictEqual(null, cache.get());
     });
 
     it('过期后删除文件', function (done) {
