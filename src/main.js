@@ -89,7 +89,7 @@ export default class Key_cache {
     _get_filepath(key, options) {
         options = options || this.options;
 
-        var md5 = createHash('md5');
+        let md5 = createHash('md5');
         // unescape encodeURIComponent 兼容中文 md5
         md5.update(unescape(encodeURIComponent(key)));
 
