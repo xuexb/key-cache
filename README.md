@@ -8,6 +8,8 @@
 
 ## Install
 
+> 依赖`node 0.12+`
+
 ```bash
 npm install key-cache --save
 ```
@@ -38,7 +40,7 @@ cache.remove([key]);
      * @default 安装包里 dirname + .cache
      * @type {String}
      */
-    dir: path.resolve(path.dirname(__dirname), '.cache'),
+    dir: resolve(__dirname, '..', '.cache'),
 
     /**
      * 保存的时间，单位秒，如果是null则表示一直保存
@@ -164,3 +166,7 @@ cache.remove();
 
 console.log(cache.get('age'));// => null
 ```
+
+## License
+
+MIT
