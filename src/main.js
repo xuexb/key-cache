@@ -6,11 +6,9 @@
 
 'use strict';
 
-import fs from 'fs';
-import extend from 'extend';
-import path from 'path';
-import md5 from 'MD5';
-import extra from 'fs-extra';
+import fs from 'fs-extra';
+import {resolve} from 'path';
+import {createHash} from 'crypto';
 
 export default class Key_cache {
     static options = {
@@ -20,7 +18,7 @@ export default class Key_cache {
          * @default 安装包里 dirname + .cache
          * @type {String}
          */
-        dir: path.resolve(path.dirname(__dirname), '.cache'),
+        dir: resolve(__dirname, '..', '.cache'),
 
         /**
          * 保存的时间，单位秒，如果是null则表示一直保存
@@ -33,13 +31,13 @@ export default class Key_cache {
 
     constructor(options = {}) {
         // 合并默认配置
-        this.options = extend({}, Key_cache.options, options);
+        this.options = Object.assign({}, Key_cache.options, options);
 
         // 解析路径
-        this.options.dir = path.resolve(this.options.dir);
+        this.options.dir = resolve(this.options.dir);
 
         // 创建缓存目录
-        extra.mkdirsSync(this.options.dir);
+        fs.mkdirsSync(this.options.dir);
     }
 
     /**
@@ -55,25 +53,22 @@ export default class Key_cache {
             return this;
         }
 
+        options = Object.assign({}, this.options, options);
 
-        let data = {};
-
-        options = extend({}, this.options, options);
+        let data = {
+            __time: null,
+            __result: value
+        };
 
         // 如果有过期时间则记录，否则忽略
-        if (options.timeout === null) {
-            data.__time = null;
-        }
-        else {
+        if (options.timeout !== null) {
             data.__time = Date.now();
             data.__end = options.timeout;
         }
 
-        data.__result = JSON.stringify(value);
-
         // 如果配置的缓存目录不是初始的则创建该目录，防止出错
         if (options.dir !== this.options.dir) {
-            extra.mkdirsSync(options.dir);
+            fs.mkdirsSync(options.dir);
         }
 
         // 写入缓存
@@ -94,7 +89,11 @@ export default class Key_cache {
     _get_filepath(key, options) {
         options = options || this.options;
 
-        return  path.resolve(options.dir, md5(key) + '.json');
+        var md5 = createHash('md5');
+        // unescape encodeURIComponent 兼容中文 md5
+        md5.update(unescape(encodeURIComponent(key)));
+
+        return  resolve(options.dir, md5.digest('hex') + '.json');
     }
 
     /**
@@ -113,6 +112,7 @@ export default class Key_cache {
         }
 
         let filedata = fs.readFileSync(filepath).toString();
+
         try {
             filedata = JSON.parse(filedata);
         }
@@ -132,7 +132,7 @@ export default class Key_cache {
             return null;
         }
 
-        return JSON.parse(filedata.__result);
+        return filedata.__result;
     }
 
     /**
@@ -145,7 +145,7 @@ export default class Key_cache {
     remove(key) {
         // 如果没有key则说明全部删除
         if (!key) {
-            extra.emptyDirSync(this.options.dir);
+            fs.emptyDirSync(this.options.dir);
             return this;
         }
 
