@@ -6,10 +6,9 @@
 
 'use strict';
 
-import fs from 'fs';
+import fs from 'fs-extra';
 import {resolve} from 'path';
-import md5 from 'MD5';
-import extra from 'fs-extra';
+import {createHash} from 'crypto';
 
 export default class Key_cache {
     static options = {
@@ -32,13 +31,13 @@ export default class Key_cache {
 
     constructor(options = {}) {
         // 合并默认配置
-        this.options = Object.assign(Key_cache.options, options);
+        this.options = Object.assign({}, Key_cache.options, options);
 
         // 解析路径
         this.options.dir = resolve(this.options.dir);
 
         // 创建缓存目录
-        extra.mkdirsSync(this.options.dir);
+        fs.mkdirsSync(this.options.dir);
     }
 
     /**
@@ -58,8 +57,7 @@ export default class Key_cache {
 
         let data = {
             __time: null,
-            // __result: JSON.stringify(value), // 最好别二次转码
-            __result: value,
+            __result: value
         };
 
         // 如果有过期时间则记录，否则忽略
@@ -70,7 +68,7 @@ export default class Key_cache {
 
         // 如果配置的缓存目录不是初始的则创建该目录，防止出错
         if (options.dir !== this.options.dir) {
-            extra.mkdirsSync(options.dir);
+            fs.mkdirsSync(options.dir);
         }
 
         // 写入缓存
@@ -91,7 +89,11 @@ export default class Key_cache {
     _get_filepath(key, options) {
         options = options || this.options;
 
-        return  resolve(options.dir, md5(key) + '.json');
+        var md5 = createHash('md5');
+        // unescape encodeURIComponent 兼容中文 md5
+        md5.update(unescape(encodeURIComponent(key)));
+
+        return  resolve(options.dir, md5.digest('hex') + '.json');
     }
 
     /**
@@ -110,9 +112,11 @@ export default class Key_cache {
         }
 
         let filedata = fs.readFileSync(filepath).toString();
+
         try {
             filedata = JSON.parse(filedata);
-        } catch (e) {
+        }
+        catch (e) {
             return null;
         }
 
@@ -128,7 +132,6 @@ export default class Key_cache {
             return null;
         }
 
-        // return JSON.parse(filedata.__result);  // 不二次转码
         return filedata.__result;
     }
 
@@ -142,7 +145,7 @@ export default class Key_cache {
     remove(key) {
         // 如果没有key则说明全部删除
         if (!key) {
-            extra.emptyDirSync(this.options.dir);
+            fs.emptyDirSync(this.options.dir);
             return this;
         }
 
