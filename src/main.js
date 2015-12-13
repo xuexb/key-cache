@@ -31,7 +31,7 @@ export default class Key_cache {
 
     constructor(options = {}) {
         // 合并默认配置
-        this.options = Object.assign({}, Key_cache.options, options);
+        this.options = {...Key_cache.options, ...options};
 
         // 解析路径
         this.options.dir = resolve(this.options.dir);
@@ -53,7 +53,7 @@ export default class Key_cache {
             return this;
         }
 
-        options = Object.assign({}, this.options, options);
+        options = {...this.options, ...options};
 
         let data = {
             __time: null,
