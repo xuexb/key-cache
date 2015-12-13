@@ -6,7 +6,8 @@
 
 'use strict';
 
-import fs from 'fs-extra';
+import {existsSync, writeFileSync, readFileSync, unlinkSync} from 'fs';
+import {mkdirsSync, emptyDirSync} from 'fs-extra';
 import {resolve} from 'path';
 import {createHash} from 'crypto';
 
@@ -37,7 +38,7 @@ export default class Key_cache {
         this.options.dir = resolve(this.options.dir);
 
         // 创建缓存目录
-        fs.mkdirsSync(this.options.dir);
+        mkdirsSync(this.options.dir);
     }
 
     /**
@@ -68,11 +69,11 @@ export default class Key_cache {
 
         // 如果配置的缓存目录不是初始的则创建该目录，防止出错
         if (options.dir !== this.options.dir) {
-            fs.mkdirsSync(options.dir);
+            mkdirsSync(options.dir);
         }
 
         // 写入缓存
-        fs.writeFileSync(this._get_filepath(key, options), JSON.stringify(data));
+        writeFileSync(this._get_filepath(key, options), JSON.stringify(data));
 
         return this;
     }
@@ -107,11 +108,11 @@ export default class Key_cache {
         let filepath = this._get_filepath(key);
 
         // 如果文件不存在
-        if (!fs.existsSync(filepath)) {
+        if (!existsSync(filepath)) {
             return null;
         }
 
-        let filedata = fs.readFileSync(filepath).toString();
+        let filedata = readFileSync(filepath).toString();
 
         try {
             filedata = JSON.parse(filedata);
@@ -145,19 +146,19 @@ export default class Key_cache {
     remove(key) {
         // 如果没有key则说明全部删除
         if (!key) {
-            fs.emptyDirSync(this.options.dir);
+            emptyDirSync(this.options.dir);
             return this;
         }
 
         let filepath = this._get_filepath(key);
 
         // 如果文件不存在
-        if (!fs.existsSync(filepath)) {
+        if (!existsSync(filepath)) {
             return this;
         }
 
         // 删除文件
-        fs.unlinkSync(filepath);
+        unlinkSync(filepath);
 
         return this;
     }
