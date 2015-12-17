@@ -104,23 +104,37 @@ describe('key-cache', function () {
     it('get json parse error', function () {
         var cache = new Key_cache();
 
+        var filepath = path.resolve(__dirname, './notime.json');
+        fs.writeFileSync(filepath, JSON.stringify({
+            name: 'key-cache'
+        }));
+
         // 重写获取路径
         cache._get_filepath = function () {
-            return path.resolve(__dirname, './json/', 'parse-error.json');
+            return filepath;
         };
 
         assert.strictEqual(null, cache.get());
+
+        // 删除刚才写入的文件
+        extra.removeSync(filepath);
     });
 
     it('get json error', function () {
         var cache = new Key_cache();
 
+        var filepath = path.resolve(__dirname, './parseerror.json');
+        fs.writeFileSync(filepath, '{');
+
         // 重写获取路径
         cache._get_filepath = function () {
-            return path.resolve(__dirname, './json/', 'no-time.json');
+            return filepath;
         };
 
         assert.strictEqual(null, cache.get());
+
+        // 删除刚才写入的文件
+        extra.removeSync(filepath);
     });
 
     it('过期后删除文件', function (done) {
