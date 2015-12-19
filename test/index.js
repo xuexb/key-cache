@@ -8,6 +8,7 @@
 
 var Key_cache = require('../');
 var assert = require('assert');
+var strictEqual = assert.strictEqual;
 var fs = require('fs');
 var path = require('path');
 var extra = require('fs-extra');
@@ -15,6 +16,7 @@ var extra = require('fs-extra');
 describe('key-cache', function () {
     var cache = new Key_cache();
 
+    // 每次执行完成后清空缓存
     afterEach(function () {
         cache.remove();
     });
@@ -23,11 +25,27 @@ describe('key-cache', function () {
         try {
             var key_cache = Key_cache;
             key_cache();
-            assert.strictEqual(true, false);
+            strictEqual(true, false);
         }
         catch (e) {
-            assert.strictEqual(true, true);
+            strictEqual(true, true);
         }
+    });
+
+    it('new Key_cache(null)', function () {
+        var flag = true;
+
+        try {
+            new Key_cache('');
+            new Key_cache(null);
+            new Key_cache(0);
+            new Key_cache('str');
+        }
+        catch (e) {
+            flag = false;
+        }
+
+        strictEqual(true, flag);
     });
 
     // 判断只要写入文件就算成功
@@ -41,7 +59,7 @@ describe('key-cache', function () {
         cache2.set('test', 1);
 
         // 目录必须存在，并且里面文件必须有1个
-        assert.strictEqual(true, fs.existsSync(filepath) && fs.readdirSync(filepath).length === 1);
+        strictEqual(true, fs.existsSync(filepath) && fs.readdirSync(filepath).length === 1);
 
         // 删除目录
         extra.removeSync('./test/temp');
@@ -54,51 +72,27 @@ describe('key-cache', function () {
 
         cache2.set('timeout', 1);
 
-        assert.strictEqual(1, cache2.get('timeout'));
+        strictEqual(1, cache2.get('timeout'));
 
         // 过期时间为1m，但执行会有延迟的
         setTimeout(function () {
-            assert.strictEqual(1, cache2.get('timeout'));
+            strictEqual(1, cache2.get('timeout'));
         }, 500);
 
         setTimeout(function () {
-            assert.strictEqual(null, cache2.get('timeout'));
+            strictEqual(null, cache2.get('timeout'));
             done();
         }, 2500);
     });
 
-    // 判断只要写入文件就算成功
-    it('set(key, value, {dir: ""})', function () {
-        var filepath = './test/temp/.' + Date.now();
-
-        // 写入文件
-        cache.set('test', 1, {
-            dir: filepath
-        });
-
-        // 目录必须存在，并且里面文件必须有1个
-        assert.strictEqual(true, fs.existsSync(filepath) && fs.readdirSync(filepath).length === 1);
-
-        // 删除目录
-        extra.removeSync('./test/temp');
+    it('get(key)', function () {
+        cache.set('1', 1);
+        strictEqual(1, cache.get('1'));
+        strictEqual(null, cache.get(null));
     });
 
-    it('set(key, value, {timeout: ""})', function (done) {
-        cache.set('test', 1, {
-            timeout: 1
-        });
-
-        assert.strictEqual(1, cache.get('test'));
-
-        // 过期时间为1m，但执行会有延迟的
-        setTimeout(function () {
-            assert.strictEqual(1, cache.get('test'));
-        }, 500);
-
-        setTimeout(function () {
-            assert.strictEqual(null, cache.get('test'));
-            done();
-        }, 1001);
+    it('return get(errkey)', function () {
+        strictEqual(null, cache.get('xxxxxx'));
     });
 
     it('get json parse error', function () {
@@ -114,7 +108,7 @@ describe('key-cache', function () {
             return filepath;
         };
 
-        assert.strictEqual(null, cache.get());
+        strictEqual(null, cache.get());
 
         // 删除刚才写入的文件
         extra.removeSync(filepath);
@@ -131,13 +125,117 @@ describe('key-cache', function () {
             return filepath;
         };
 
-        assert.strictEqual(null, cache.get());
+        strictEqual(null, cache.get());
 
         // 删除刚才写入的文件
         extra.removeSync(filepath);
     });
 
-    it('过期后删除文件', function (done) {
+    // 判断只要写入文件就算成功
+    it('set(key, value)', function () {
+        var filepath;
+
+        // 写入文件
+        cache.set('test', 1);
+
+        strictEqual(1, cache.get('test'));
+
+        // 使用内置方法读取出来路径
+        filepath = cache._get_filepath('test');
+
+        // 文件必须存在
+        strictEqual(true, fs.existsSync(filepath));
+
+        // 查看是否能正常的解析
+        try {
+            JSON.parse(fs.readFileSync(filepath).toString());
+        }
+        catch (e) {
+            strictEqual(true, false);
+        }
+    });
+
+    // 判断只要写入文件就算成功
+    it('set(key, value, {dir: path})', function () {
+        var filepath = './test/temp/.' + Date.now();
+
+        // 写入文件
+        cache.set('test', 1, {
+            dir: filepath
+        });
+
+        // 目录必须存在，并且里面文件必须有1个
+        strictEqual(true, fs.existsSync(filepath) && fs.readdirSync(filepath).length === 1);
+
+        // 删除目录
+        extra.removeSync('./test/temp');
+    });
+
+    it('set(key, value, {timeout: ""})', function (done) {
+        cache.set('test', 1, {
+            timeout: 1
+        });
+
+        strictEqual(1, cache.get('test'));
+
+        // 过期时间为1m，但执行会有延迟的
+        setTimeout(function () {
+            strictEqual(1, cache.get('test'));
+        }, 500);
+
+        setTimeout(function () {
+            strictEqual(null, cache.get('test'));
+            done();
+        }, 1001);
+    });
+
+    it('return set()', function () {
+        strictEqual(cache, cache.set());
+    });
+
+    it('return set(key)', function () {
+        strictEqual(cache, cache.set('key'));
+        strictEqual(cache, cache.set(true));
+        strictEqual(cache, cache.set(0));
+        strictEqual(cache, cache.set(null));
+    });
+
+    it('return set(key, value)', function () {
+        strictEqual(cache, cache.set('key', 'value'));
+        strictEqual(cache, cache.set('key', false));
+        strictEqual(cache, cache.set('key', 0));
+    });
+
+    it('remove(key)', function () {
+        cache.set('aaa', 1);
+
+        cache.remove('aaa');
+
+        strictEqual(null, cache.get('aaa'));
+    });
+
+    it('remove()', function () {
+        cache.set('aaa', 1);
+        cache.set('bbb', 1);
+        cache.set('ccc', 1);
+
+        cache.remove();
+
+        strictEqual(0, fs.readdirSync(cache.options.dir).length);
+    });
+
+    it('return remove()', function () {
+        strictEqual(cache, cache.remove());
+    });
+
+    it('return remove(key)', function () {
+        strictEqual(cache, cache.remove('not file'));
+
+        cache.set('key', 1);
+        strictEqual(cache, cache.remove('key'));
+    });
+
+    it('timeout remove file', function (done) {
         var filepath = './test/temp/.' + Date.now();
         var cache2 = new Key_cache({
             dir: filepath,
@@ -152,29 +250,41 @@ describe('key-cache', function () {
             cache2.get('test');
 
             // 验证文件为空
-            assert.strictEqual(0, fs.readdirSync(path.resolve(filepath)).length);
+            strictEqual(0, fs.readdirSync(path.resolve(filepath)).length);
+
+            done();
 
             // 删除目录
             extra.removeSync('./test/temp');
-            done();
-        }, 1001);
+        }, 1500);
     });
 
-    it('string格式校验', function () {
+    it('string check', function () {
         cache.set('test', '1');
 
-        assert.strictEqual('string', typeof cache.get('test'));
-        assert.strictEqual('1', cache.get('test'));
+        strictEqual('string', typeof cache.get('test'));
+        strictEqual('1', cache.get('test'));
     });
 
-    it('number格式校验', function () {
+    it('boolean check', function () {
+        cache.set('true', true);
+        cache.set('false', false);
+
+        strictEqual('boolean', typeof cache.get('true'));
+        strictEqual(false, cache.get('false'));
+        strictEqual(true, cache.get('true'));
+    });
+
+    it('number check', function () {
         cache.set('test', 1);
+        cache.set('0', 0);
 
-        assert.strictEqual('number', typeof cache.get('test'));
-        assert.strictEqual(1, cache.get('test'));
+        strictEqual('number', typeof cache.get('test'));
+        strictEqual(1, cache.get('test'));
+        strictEqual(0, cache.get('0'));
     });
 
-    it('json格式判断', function () {
+    it('object check', function () {
         var result;
         var json = {
             status: 'ok',
@@ -191,51 +301,11 @@ describe('key-cache', function () {
 
         assert.deepEqual(json, result);
 
-        assert.strictEqual(json.status, result.status);
-        assert.strictEqual(json.code, result.code);
-        assert.strictEqual(json.flag, result.flag);
-        assert.deepEqual(json.array, result.array);
-    });
+        strictEqual(json.status, result.status);
+        strictEqual(json.code, result.code);
+        strictEqual(json.flag, result.flag);
 
-    it('remove(key)', function () {
-        cache.set('aaa', 1);
-
-        cache.remove('aaa');
-
-        assert.strictEqual(null, cache.get('aaa'));
-    });
-
-    it('remove()', function () {
-        cache.set('aaa', 1);
-        cache.set('bbb', 1);
-        cache.set('ccc', 1);
-
-        cache.remove();
-
-        assert.strictEqual(0, fs.readdirSync(cache.options.dir).length);
-    });
-
-    it('return set()', function () {
-        assert.strictEqual(cache, cache.set());
-    });
-
-    it('return set(key)', function () {
-        assert.strictEqual(cache, cache.set('key'));
-    });
-
-    it('return set(key, value)', function () {
-        assert.strictEqual(cache, cache.set('key', 'value'));
-    });
-
-    it('return remove()', function () {
-        assert.strictEqual(cache, cache.remove());
-    });
-
-    it('return remove(key)', function () {
-        assert.strictEqual(cache, cache.remove('key'));
-    });
-
-    it('return get(errkey)', function () {
-        assert.strictEqual(null, cache.get('xxxxxx'));
+        cache.set('null', null);
+        strictEqual(null, cache.get('null'));
     });
 });
