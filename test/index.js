@@ -64,7 +64,7 @@ describe('key-cache', function () {
         setTimeout(function () {
             assert.strictEqual(null, cache2.get('test'));
             done();
-        }, 1001);
+        }, 1500);
     });
 
     // 判断只要写入文件就算成功
