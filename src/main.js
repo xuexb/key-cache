@@ -50,7 +50,7 @@ export default class Key_cache {
      * @return {Object} this
      */
     set(key, value, options = {}) {
-        if (!key || !value) {
+        if (!key  || 'string' !== typeof key || value === undefined) {
             return this;
         }
 
