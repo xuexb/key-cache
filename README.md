@@ -1,6 +1,6 @@
 # key-cache
 
-以key形式的cache
+In the form of key stored in the file
 
 ---
 
@@ -8,7 +8,7 @@
 
 ## Install
 
-> 依赖`node 0.12+`
+> requires node 0.10+
 
 ```bash
 npm install key-cache --save
@@ -17,52 +17,52 @@ npm install key-cache --save
 ## Use
 
 ```js
+// Create reference
 var Key_cache = require('key-cache');
 
+// Examples of objects
 var cache = new Key_cache(options);
 
-cache.set(key, val, [options]);
-
-cache.get(key);
-
-cache.remove([key]);
+// Here you can use to manipulate the cache api
+cache.get('balbalbal');
 ```
 
-## Options
+## The default configuration
 
-> 默认配置
+
+### dir
 
 ```js
-{
-    /**
-     * 缓存目录，路径基于当前运行目录
-     *
-     * @default 安装包里 dirname + .cache
-     * @type {String}
-     */
-    dir: resolve(__dirname, '..', '.cache'),
+/**
+ * Cache directory path based on the current run directory
+ *
+ * @default key-cache installation path of .cache/ directory
+ * @type {String}
+ */
+```
 
-    /**
-     * 保存的时间，单位秒，如果是null则表示一直保存
-     *
-     * @default null
-     * @type {Number|null}
-     */
-    timeout: null
-}
+#### timeout
+
+```js
+/**
+ * Save time, in seconds, if empty will always exist
+ *
+ * @default null
+ * @type {number|null}
+ */
 ```
 
 ## Api
 
 ### set
 
+Write data to a file
+
 ```js
 /**
- * 设置缓存
- *
- * @param {string} key   key
- * @param {Object|string} value 值
- * @param {Object|undefined} options 可选配置
+ * @param {string} key
+ * @param {Object|string} value
+ * @param {Object|undefined} options        If there will override the default configuration
  * @return {Object} this
  */
 set(key, value, options = {})
@@ -70,33 +70,33 @@ set(key, value, options = {})
 
 ### get
 
+Get data from files
+
 ```js
 /**
- * 获取缓存
+ * @param  {string} key
  *
- * @param  {string} key key
- *
- * @return {Object|string|null}     结果，如果没有找到或者过期则为null
+ * @return {Object|string|null}             If there is no time has expired or will return null
  */
 get(key)
 ```
 
 ### remove
 
+Delete data, and delete files
+
 ```js
 /**
- * 删除缓存
- *
- * @param  {string|undefined} key key，如果为空则全部删除
+ * @param  {string|undefined} key
  *
  * @return {Object}     this
  */
 remove(key)
 ```
 
-## Demo
+## Examples
 
-### 默认
+### Simple
 
 ```js
 var cache = new Key_cache();
@@ -107,47 +107,45 @@ console.log(cache.get('name'));
 
 cache.remove('name');
 
-console.log(cache.get('name'));// => null
+console.log(cache.get('name')); // => null
 ```
 
-### 设置缓存目录
+### Custom cache directory
 
 ```js
 var cache = new Key_cache({
-    // 相对于当前运行目录
-    dir: './cache/'
+    dir: '../cache/'
 });
 
 cache.set('name', 'key-cache');
 
-// 传的配置参数会覆盖实例的参数
+// override the default configuration
 cache.set('name2', 'key-cache', {
     dir: './cache2'
 });
 ```
 
-### 设置过期时间
+### Set the expiration time
 
 ```js
 var cache = new Key_cache({
-    // 单位秒
     timeout: 3
 });
 
 cache.set('name', 'key-cache');
 
-// 传的配置参数会覆盖实例的参数
+// override the default configuration
 cache.set('age', 1, {
     timeout: 5
 });
 
 setTimeout(function(){
-    console.log(cache.get('name'));// => null
-    console.log(cache.get('age'));// => 1
+    console.log(cache.get('name')); // => null
+    console.log(cache.get('age')); // => 1
 }, 3000);
 ```
 
-### 删除缓存
+### Delete Cache
 
 ```js
 var cache = new Key_cache();
@@ -155,16 +153,35 @@ var cache = new Key_cache();
 cache.set('name', 'key-cache');
 cache.set('age', 1);
 
-// 删除单条
+// Delete single
 cache.remove('name');
 
-console.log(cache.get('name'));// => null
-console.log(cache.get('age'));// => 1
+console.log(cache.get('name')); // => null
+console.log(cache.get('age')); // => 1
 
-// 删除全部
+// Delete all
 cache.remove();
 
-console.log(cache.get('age'));// => null
+console.log(cache.get('age')); // => null
+```
+
+## Develop
+
+```js
+// Run the compiler, the es6 code from the compiled into lib in src
+npm run compile
+
+// Monitor file changes and runs the compiler
+npm run watch
+
+// Use fecs run Style Checker
+npm run check
+
+// Use mocha run the test case
+npm run test
+
+// Run the test cases and code coverage
+npm run test-cov
 ```
 
 ## License
