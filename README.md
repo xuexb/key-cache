@@ -6,12 +6,11 @@ Storing data in the form of key into the file
 
 ---
 
-
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
-[![Linux Build][travis-image]][travis-url]
-[![Windows Build][appveyor-image]][appveyor-url]
-[![Test Coverage][coveralls-image]][coveralls-url]
+[![NPM Version](https://img.shields.io/npm/v/key-cache.svg)](https://npmjs.org/package/key-cache)
+[![NPM Downloads](https://img.shields.io/npm/dm/key-cache.svg)](https://npmjs.org/package/key-cache)
+[![Linux Build](https://img.shields.io/travis/xuexb/key-cache/master.svg?label=linux)](https://travis-ci.org/xuexb/key-cache)
+[![Windows Build](https://img.shields.io/appveyor/ci/xuexb/key-cache/master.svg?label=windows)](https://ci.appveyor.com/project/xuexb/key-cache)
+[![Test Coverage](https://img.shields.io/coveralls/xuexb/key-cache/master.svg)](https://coveralls.io/r/xuexb/key-cache?branch=master)
 
 ## Install
 
