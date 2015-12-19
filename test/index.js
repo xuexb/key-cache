@@ -49,22 +49,22 @@ describe('key-cache', function () {
 
     it('options.timeout', function (done) {
         var cache2 = new Key_cache({
-            timeout: 1
+            timeout: 2
         });
 
-        cache2.set('test', 1);
+        cache2.set('timeout', 1);
 
-        assert.strictEqual(1, cache2.get('test'));
+        assert.strictEqual(1, cache2.get('timeout'));
 
         // 过期时间为1m，但执行会有延迟的
         setTimeout(function () {
-            assert.strictEqual(1, cache2.get('test'));
+            assert.strictEqual(1, cache2.get('timeout'));
         }, 500);
 
         setTimeout(function () {
-            assert.strictEqual(null, cache2.get('test'));
+            assert.strictEqual(null, cache2.get('timeout'));
             done();
-        }, 1500);
+        }, 2500);
     });
 
     // 判断只要写入文件就算成功
