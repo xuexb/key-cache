@@ -1,50 +1,50 @@
 # key-cache
 
-[中文文档](./README-CN.md)
+[English documents](./README.md)
 
-Storing data in the form of key into the file
+以key的形式储存数据到文件内
 
 ---
 
 [![npm version](https://badge.fury.io/js/key-cache.svg)](https://badge.fury.io/js/key-cache) [![Build Status](https://travis-ci.org/xuexb/key-cache.svg?branch=master)](https://travis-ci.org/xuexb/key-cache) [![Coverage Status](https://coveralls.io/repos/xuexb/key-cache/badge.svg?branch=master&service=github)](https://coveralls.io/github/xuexb/key-cache?branch=master)
 
-## Install
+## 安装
 
-> requires node 0.10+
+> 依赖 `node 0.10+`
 
 ```bash
 npm install key-cache --save
 ```
 
-## Use
+## 使用
 
 ```js
-// Create reference
+// 创建一个引用
 var Key_cache = require('key-cache');
 
-// Examples of objects
+// 实例化对象
 var cache = new Key_cache(options);
 
-// Here you can use to manipulate the cache api
+// 这里就可以使用接口来操作了
 cache.get('balbalbal');
 ```
 
-## The default configuration
+## 默认参数
 
 ### options.dir
 
-Cache directory path based on the current run directory
+数据缓存的目录，基于当前运行的目录
 
 ```js
 /**
- * @default key-cache installation path of .cache/ directory
+ * @default key-cache安装目录的.cache目录
  * @type {String}
  */
 ```
 
 ### options.timeout
 
-Save time, in seconds, if empty will always exist
+缓存保存时间，单位`秒`，如果为空则永久保存
 
 ```js
 /**
@@ -53,17 +53,17 @@ Save time, in seconds, if empty will always exist
  */
 ```
 
-## Api
+## 接口
 
 ### set
 
-Write data to a file
+写入数据到缓存文件内
 
 ```js
 /**
  * @param {string} key
  * @param {Object|string} value
- * @param {Object|undefined} options        If there will override the default configuration
+ * @param {Object|undefined} options        如果有则会覆盖实例参数
  * @return {Object} this
  */
 set(key, value, options = {})
@@ -71,20 +71,20 @@ set(key, value, options = {})
 
 ### get
 
-Get data from files
+从缓存文件内获取数据
 
 ```js
 /**
  * @param  {string} key
  *
- * @return {Object|string|null}             If there is no time has expired or will return null
+ * @return {Object|string|null}             如果该数据不存在或者过期则返回null
  */
 get(key)
 ```
 
 ### remove
 
-Delete data, and delete files
+删除缓存数据和缓存文件
 
 ```js
 /**
@@ -95,9 +95,9 @@ Delete data, and delete files
 remove(key)
 ```
 
-## Examples
+## 例子
 
-### Simple
+### 简单
 
 ```js
 var cache = new Key_cache();
@@ -111,7 +111,7 @@ cache.remove('name');
 console.log(cache.get('name')); // => null
 ```
 
-### Custom cache directory
+### 自定义缓存目录
 
 ```js
 var cache = new Key_cache({
@@ -120,13 +120,13 @@ var cache = new Key_cache({
 
 cache.set('name', 'key-cache');
 
-// override the default configuration
+// 这里参数会覆盖上面配置dir
 cache.set('name2', 'key-cache', {
     dir: './cache2'
 });
 ```
 
-### Set the expiration time
+### 设置过期时间
 
 ```js
 var cache = new Key_cache({
@@ -135,7 +135,7 @@ var cache = new Key_cache({
 
 cache.set('name', 'key-cache');
 
-// override the default configuration
+// 这里参数会覆盖上面配置timeout
 cache.set('age', 1, {
     timeout: 5
 });
@@ -146,7 +146,7 @@ setTimeout(function(){
 }, 3000);
 ```
 
-### Delete Cache
+### 删除缓存
 
 ```js
 var cache = new Key_cache();
@@ -154,37 +154,37 @@ var cache = new Key_cache();
 cache.set('name', 'key-cache');
 cache.set('age', 1);
 
-// Delete single
+// 删除单个
 cache.remove('name');
 
 console.log(cache.get('name')); // => null
 console.log(cache.get('age')); // => 1
 
-// Delete all
+// 删除全部
 cache.remove();
 
 console.log(cache.get('age')); // => null
 ```
 
-## Develop
+## 参与开发
 
 ```js
-// Run the compiler, the es6 code from the compiled into lib in src
+// 运行编译，将es6代码从 src 编译到 lib 目录
 npm run compile
 
-// Monitor file changes and runs the compiler
+// 监听文件改动并实时编译
 npm run watch
 
-// Use fecs run Style Checker
+// 使用fecs检查代码规范
 npm run check
 
-// Use mocha run the test case
+// 使用 mocha 运行测试用例
 npm run test
 
-// Run the test cases and code coverage
+// 运行测试用例和代码覆盖率
 npm run test-cov
 ```
 
-## License
+## 协议
 
 MIT
