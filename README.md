@@ -6,7 +6,12 @@ Storing data in the form of key into the file
 
 ---
 
-[![npm version](https://badge.fury.io/js/key-cache.svg)](https://badge.fury.io/js/key-cache) [![Build Status](https://travis-ci.org/xuexb/key-cache.svg?branch=master)](https://travis-ci.org/xuexb/key-cache) [![Coverage Status](https://coveralls.io/repos/xuexb/key-cache/badge.svg?branch=master&service=github)](https://coveralls.io/github/xuexb/key-cache?branch=master)
+
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+[![Linux Build][travis-image]][travis-url]
+[![Windows Build][appveyor-image]][appveyor-url]
+[![Test Coverage][coveralls-image]][coveralls-url]
 
 ## Install
 
