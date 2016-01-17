@@ -6,7 +6,7 @@
 
 'use strict';
 
-var Key_cache = require('../');
+var KeyCache = require('../');
 var assert = require('assert');
 var strictEqual = assert.strictEqual;
 var fs = require('fs');
@@ -14,7 +14,7 @@ var path = require('path');
 var extra = require('fs-extra');
 
 describe('key-cache', function () {
-    var cache = new Key_cache();
+    var cache = new KeyCache();
 
     // 每次执行完成后清空缓存
     afterEach(function () {
@@ -23,8 +23,8 @@ describe('key-cache', function () {
 
     it('new', function () {
         try {
-            var key_cache = Key_cache;
-            key_cache();
+            var keycache = KeyCache;
+            keycache();
             strictEqual(true, false);
         }
         catch (e) {
@@ -32,14 +32,14 @@ describe('key-cache', function () {
         }
     });
 
-    it('new Key_cache(null)', function () {
+    it('new KeyCache(null)', function () {
         var flag = true;
 
         try {
-            new Key_cache('');
-            new Key_cache(null);
-            new Key_cache(0);
-            new Key_cache('str');
+            new KeyCache('');
+            new KeyCache(null);
+            new KeyCache(0);
+            new KeyCache('str');
         }
         catch (e) {
             flag = false;
@@ -51,7 +51,7 @@ describe('key-cache', function () {
     // 判断只要写入文件就算成功
     it('options.dir', function () {
         var filepath = './test/temp/.' + Date.now();
-        var cache2 = new Key_cache({
+        var cache2 = new KeyCache({
             dir: filepath
         });
 
@@ -66,7 +66,7 @@ describe('key-cache', function () {
     });
 
     it('options.timeout', function (done) {
-        var cache2 = new Key_cache({
+        var cache2 = new KeyCache({
             timeout: 2
         });
 
@@ -96,7 +96,7 @@ describe('key-cache', function () {
     });
 
     it('get json parse error', function () {
-        var cache = new Key_cache();
+        var cache = new KeyCache();
 
         var filepath = path.resolve(__dirname, './notime.json');
         fs.writeFileSync(filepath, JSON.stringify({
@@ -104,7 +104,7 @@ describe('key-cache', function () {
         }));
 
         // 重写获取路径
-        cache._get_filepath = function () {
+        cache._getFilePath = function () {
             return filepath;
         };
 
@@ -115,13 +115,13 @@ describe('key-cache', function () {
     });
 
     it('get json error', function () {
-        var cache = new Key_cache();
+        var cache = new KeyCache();
 
         var filepath = path.resolve(__dirname, './parseerror.json');
         fs.writeFileSync(filepath, '{');
 
         // 重写获取路径
-        cache._get_filepath = function () {
+        cache._getFilePath = function () {
             return filepath;
         };
 
@@ -141,7 +141,7 @@ describe('key-cache', function () {
         strictEqual(1, cache.get('test'));
 
         // 使用内置方法读取出来路径
-        filepath = cache._get_filepath('test');
+        filepath = cache._getFilePath('test');
 
         // 文件必须存在
         strictEqual(true, fs.existsSync(filepath));
@@ -237,7 +237,7 @@ describe('key-cache', function () {
 
     it('timeout remove file', function (done) {
         var filepath = './test/temp/.' + Date.now();
-        var cache2 = new Key_cache({
+        var cache2 = new KeyCache({
             dir: filepath,
             timeout: 1
         });

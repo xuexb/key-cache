@@ -11,7 +11,7 @@ import {mkdirsSync, emptyDirSync} from 'fs-extra';
 import {resolve} from 'path';
 import {createHash} from 'crypto';
 
-export default class Key_cache {
+export default class KeyCache {
     static options = {
         /**
          * 缓存目录，路径基于当前运行目录
@@ -32,7 +32,7 @@ export default class Key_cache {
 
     constructor(options = {}) {
         // 合并默认配置
-        this.options = {...Key_cache.options, ...options};
+        this.options = {...KeyCache.options, ...options};
 
         // 解析路径
         this.options.dir = resolve(this.options.dir);
@@ -73,7 +73,7 @@ export default class Key_cache {
         }
 
         // 写入缓存
-        writeFileSync(this._get_filepath(key, options), JSON.stringify(data));
+        writeFileSync(this._getFilePath(key, options), JSON.stringify(data));
 
         return this;
     }
@@ -87,7 +87,7 @@ export default class Key_cache {
      *
      * @return {string}     文件绝对路径
      */
-    _get_filepath(key, options) {
+    _getFilePath(key, options) {
         options = options || this.options;
 
         let md5 = createHash('md5');
@@ -105,7 +105,7 @@ export default class Key_cache {
      * @return {Object|string|null}     结果，如果没有找到或者过期则为null
      */
     get(key) {
-        let filepath = this._get_filepath(key);
+        let filepath = this._getFilePath(key);
 
         // 如果文件不存在
         if (!existsSync(filepath)) {
@@ -150,7 +150,7 @@ export default class Key_cache {
             return this;
         }
 
-        let filepath = this._get_filepath(key);
+        let filepath = this._getFilePath(key);
 
         // 如果文件不存在
         if (!existsSync(filepath)) {

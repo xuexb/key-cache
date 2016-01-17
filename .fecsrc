@@ -3,10 +3,6 @@
         "env": {
             "node": true,
             "browser": false
-        },
-
-        "rules": {
-            "fecs-camelcase": [2, {"ignore": ["/_/"]}]
         }
     }
 }
