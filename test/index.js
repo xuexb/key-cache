@@ -32,10 +32,13 @@ describe('key-cache', function () {
         }
     });
 
-    it('new KeyCache(null)', function () {
+    it('new KeyCache() check option', function () {
         var flag = true;
 
         try {
+            new KeyCache({});
+            new KeyCache();
+            new KeyCache(false);
             new KeyCache('');
             new KeyCache(null);
             new KeyCache(0);
