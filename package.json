@@ -38,6 +38,6 @@
     "precommit": "1.x.x"
   },
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 0.12.0"
   }
 }

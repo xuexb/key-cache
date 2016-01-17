@@ -14,7 +14,7 @@
 
 ## 安装
 
-> 依赖 `node 0.10+`
+> 依赖 `node 0.12+`
 
 ```bash
 npm install key-cache --save
