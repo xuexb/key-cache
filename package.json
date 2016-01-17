@@ -1,7 +1,7 @@
 {
   "name": "key-cache",
   "version": "0.1.4",
-  "description": "以key形式的缓存文件",
+  "description": "Storing data in the form of key into the file",
   "main": "lib/main.js",
   "scripts": {
     "check": "fecs check src/ test/",
