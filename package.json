@@ -10,8 +10,12 @@
     "start": "node test.js",
     "prepublish": "npm run compile",
     "test-cov": "istanbul cover ./node_modules/mocha/bin/_mocha -- -t 5000 --recursive  -R spec test/",
-    "test": "mocha --reporter spec --timeout 5000 --recursive test/"
+    "test": "mocha --reporter spec --timeout 5000 --recursive test/",
+    "precommit": "npm run check",
+    "hook-install": "precommit install",
+    "hook-remove": "precommit remove"
   },
+  "precommit" : ["npm run precommit"],
   "repository": {
     "type": "git",
     "url": "https://github.com/xuexb/key-cache.git"
@@ -30,7 +34,8 @@
     "babel": "5.8.21",
     "fecs": "^0.4.13",
     "istanbul": "^0.4.1",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "precommit": "1.x.x"
   },
   "engines": {
     "node": ">= 0.10.0"
