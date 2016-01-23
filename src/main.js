@@ -27,7 +27,14 @@ export default class KeyCache {
          * @default null
          * @type {Number|null}
          */
-        timeout: null
+        timeout: null,
+
+        /**
+         * 是否使用md5命名缓存文件
+         *
+         * @type {Boolean}
+         */
+        md5key: true
     }
 
     constructor(options = {}) {
@@ -88,13 +95,28 @@ export default class KeyCache {
      * @return {string}     文件绝对路径
      */
     _getFilePath(key, options) {
+        let filename;
+
         options = options || this.options;
 
-        let md5 = createHash('md5');
-        // unescape encodeURIComponent 兼容中文 md5
-        md5.update(unescape(encodeURIComponent(key)));
+        if (options.md5key) {
+            let md5 = createHash('md5');
+            // unescape encodeURIComponent 兼容中文 md5
+            md5.update(unescape(encodeURIComponent(key)));
 
-        return  resolve(options.dir, md5.digest('hex') + '.json');
+            filename = md5.digest('hex');
+        }
+        else {
+            // 把文件名中的:替换为空
+            filename = String(key).replace(/[\:\\\?\.<>\/\#\$,]/g, '');
+
+            // 如果替换后为空则使用md5
+            if (!filename) {
+                return this._getFilePath(key, {...options, ...{md5key: true}});
+            }
+        }
+
+        return  resolve(options.dir, filename + '.json');
     }
 
     /**

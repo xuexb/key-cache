@@ -51,6 +51,35 @@ describe('key-cache', function () {
         strictEqual(true, flag);
     });
 
+    it('options.md5key', function () {
+        var filepath = './test/temp/.' + Date.now();
+        var cache2 = new KeyCache({
+            dir: filepath,
+            md5key: false
+        });
+
+        var arr = [
+            '中文',
+            'en',
+            '空格   ',
+            '～！@#￥%……&*（））——',
+            '~!@#$%^&*()_+',
+            '{}[];"\'',
+            '<>,./?\\:',
+            '::::'
+        ];
+
+        arr.forEach(function (val, index) {
+            cache2.set(val, index);
+        });
+
+        strictEqual(true, fs.existsSync(filepath));
+        strictEqual(arr.length, fs.readdirSync(filepath).length);
+
+        // 删除目录
+        extra.removeSync('./test/temp');
+    });
+
     // 判断只要写入文件就算成功
     it('options.dir', function () {
         var filepath = './test/temp/.' + Date.now();
