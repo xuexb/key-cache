@@ -66,7 +66,8 @@ describe('key-cache', function () {
             '~!@#$%^&*()_+',
             '{}[];"\'',
             '<>,./?\\:',
-            '::::'
+            '::::',
+            '1234566'
         ];
 
         arr.forEach(function (val, index) {
