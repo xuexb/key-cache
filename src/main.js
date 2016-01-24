@@ -32,6 +32,7 @@ export default class KeyCache {
         /**
          * 是否使用md5命名缓存文件
          *
+         * @default true
          * @type {Boolean}
          */
         md5key: true
@@ -108,7 +109,7 @@ export default class KeyCache {
         }
         else {
             // 把文件名中的:替换为空
-            filename = String(key).replace(/[^\u4e00-\u9fa5a-zA-Z\_\-]/g, '');
+            filename = String(key).replace(/[^\u4e00-\u9fa5a-zA-Z\_\-0-9]/g, '');
 
             // 如果替换后为空则使用md5
             if (!filename) {
