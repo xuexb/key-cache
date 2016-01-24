@@ -76,6 +76,10 @@ describe('key-cache', function () {
         strictEqual(true, fs.existsSync(filepath));
         strictEqual(arr.length, fs.readdirSync(filepath).length);
 
+        arr.forEach(function (val, index) {
+            strictEqual(index, cache2.get(val));
+        });
+
         // 删除目录
         extra.removeSync('./test/temp');
     });
