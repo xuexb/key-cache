@@ -217,6 +217,10 @@ npm run test-cov
 
 ## Changelog
 
+### 0.2.0
+
+Add `options.md5key` parameter is used to set whether to use md5 named cache file name
+
 ### 0.1.x
 
 Optimized code, add a test case
