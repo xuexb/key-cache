@@ -57,6 +57,17 @@ cache.get('balbalbal');
  */
 ```
 
+### options.md5key
+
+设置是否使用`md5`命名缓存文件名，为了路径的有效性，会过滤除了中文、字母、数字、-、_ 外的其他字符将被忽略，使用的正则是：`/[^\u4e00-\u9fa5a-zA-Z\_\-0-9]/g`.
+
+```js
+/**
+ * @default true
+ * @type {Boolean}
+ */
+```
+
 ## 接口
 
 ### set
@@ -170,6 +181,23 @@ cache.remove();
 console.log(cache.get('age')); // => null
 ```
 
+
+### md5key配置
+
+> 配置不使用`md5`为缓存文件名
+
+```js
+var cache = new Key_cache({
+    md5key: false
+});
+
+cache.set('key', 'key-cache'); // => 文件名是 key.json
+cache.set('age', 1); // => 文件名是 age.json
+cache.set('this a space +-', 1); // => 文件名是 thisaspace-.json
+cache.set('中文', 1); // => filename is 中文.json
+```
+
+
 ## 参与开发
 
 ```js
@@ -188,6 +216,12 @@ npm run test
 // 运行测试用例和代码覆盖率
 npm run test-cov
 ```
+
+## 更新日志
+
+### 0.1.x
+
+优化代码，添加测试用例
 
 ## 协议
 

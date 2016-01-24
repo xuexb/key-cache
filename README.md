@@ -57,6 +57,17 @@ Save time, in seconds, if empty will always exist
  */
 ```
 
+### options.md5key
+
+Set whether to use md5 named cache file name，To path is valid, it will filter the illegal character key, in addition to Chinese, letters, numbers, -, other characters will be ignored outside _, regular use is`/[^\u4e00-\u9fa5a-zA-Z\_\-0-9]/g`.
+
+```js
+/**
+ * @default true
+ * @type {Boolean}
+ */
+```
+
 ## Api
 
 ### set
@@ -170,6 +181,21 @@ cache.remove();
 console.log(cache.get('age')); // => null
 ```
 
+### md5key
+
+> Do not use md5 named cache file
+
+```js
+var cache = new Key_cache({
+    md5key: false
+});
+
+cache.set('key', 'key-cache'); // => filename is key.json
+cache.set('age', 1); // => filename is age.json
+cache.set('this a space +-', 1); // => filename is thisaspace-.json
+cache.set('中文', 1); // => filename is 中文.json
+```
+
 ## Develop
 
 ```js
@@ -188,6 +214,12 @@ npm run test
 // Run the test cases and code coverage
 npm run test-cov
 ```
+
+## Changelog
+
+### 0.1.x
+
+Optimized code, add a test case
 
 ## License
 
