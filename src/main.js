@@ -108,7 +108,7 @@ export default class KeyCache {
         }
         else {
             // 把文件名中的:替换为空
-            filename = String(key).replace(/[\:\\\?\.<>\/\#\$,]/g, '');
+            filename = String(key).replace(/[^\u4e00-\u9fa5a-zA-Z\_\-]/g, '');
 
             // 如果替换后为空则使用md5
             if (!filename) {
