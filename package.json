@@ -4,7 +4,7 @@
   "description": "Storing data in the form of key into the file",
   "main": "lib/main.js",
   "scripts": {
-    "check": "fecs check src/ test/",
+    "check": "fecs check src/ test/ --reporter=baidu",
     "compile": "babel --optional runtime --loose all --stage 0 --modules common src/ --out-dir lib/",
     "watch": "npm run compile -- --watch",
     "start": "node test.js",
