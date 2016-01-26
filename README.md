@@ -24,10 +24,10 @@ npm install key-cache --save
 
 ```js
 // Create reference
-var Key_cache = require('key-cache');
+var KeyCache = require('key-cache');
 
 // Examples of objects
-var cache = new Key_cache(options);
+var cache = new KeyCache(options);
 
 // Here you can use to manipulate the cache api
 cache.get('balbalbal');
@@ -115,7 +115,7 @@ remove(key)
 ### Simple
 
 ```js
-var cache = new Key_cache();
+var cache = new KeyCache();
 
 cache.set('name', 'key-cache');
 
@@ -129,7 +129,7 @@ console.log(cache.get('name')); // => null
 ### Custom cache directory
 
 ```js
-var cache = new Key_cache({
+var cache = new KeyCache({
     dir: '../cache/'
 });
 
@@ -144,7 +144,7 @@ cache.set('name2', 'key-cache', {
 ### Set the expiration time
 
 ```js
-var cache = new Key_cache({
+var cache = new KeyCache({
     timeout: 3
 });
 
@@ -164,7 +164,7 @@ setTimeout(function(){
 ### Delete Cache
 
 ```js
-var cache = new Key_cache();
+var cache = new KeyCache();
 
 cache.set('name', 'key-cache');
 cache.set('age', 1);
@@ -186,7 +186,7 @@ console.log(cache.get('age')); // => null
 > Do not use md5 named cache file
 
 ```js
-var cache = new Key_cache({
+var cache = new KeyCache({
     md5key: false
 });
 

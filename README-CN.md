@@ -24,10 +24,10 @@ npm install key-cache --save
 
 ```js
 // 创建一个引用
-var Key_cache = require('key-cache');
+var KeyCache = require('key-cache');
 
 // 实例化对象
-var cache = new Key_cache(options);
+var cache = new KeyCache(options);
 
 // 这里就可以使用接口来操作了
 cache.get('balbalbal');
@@ -115,7 +115,7 @@ remove(key)
 ### 简单
 
 ```js
-var cache = new Key_cache();
+var cache = new KeyCache();
 
 cache.set('name', 'key-cache');
 
@@ -129,7 +129,7 @@ console.log(cache.get('name')); // => null
 ### 自定义缓存目录
 
 ```js
-var cache = new Key_cache({
+var cache = new KeyCache({
     dir: '../cache/'
 });
 
@@ -144,7 +144,7 @@ cache.set('name2', 'key-cache', {
 ### 设置过期时间
 
 ```js
-var cache = new Key_cache({
+var cache = new KeyCache({
     timeout: 3
 });
 
@@ -164,7 +164,7 @@ setTimeout(function(){
 ### 删除缓存
 
 ```js
-var cache = new Key_cache();
+var cache = new KeyCache();
 
 cache.set('name', 'key-cache');
 cache.set('age', 1);
@@ -187,7 +187,7 @@ console.log(cache.get('age')); // => null
 > 配置不使用`md5`为缓存文件名
 
 ```js
-var cache = new Key_cache({
+var cache = new KeyCache({
     md5key: false
 });
 
