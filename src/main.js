@@ -156,7 +156,8 @@ export default class KeyCache {
             return null;
         }
 
-        return filedata.__result;
+        // 如果为undefined则返回null，因为值是fn时不会被JSON.stringify解析
+        return filedata.__result !== undefined ? filedata.__result : null;
     }
 
     /**

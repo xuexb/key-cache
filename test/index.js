@@ -321,6 +321,19 @@ describe('key-cache', function () {
         strictEqual(0, cache.get('0'));
     });
 
+    it('function check', function () {
+        cache.set('test', function () {});
+
+        strictEqual(null, cache.get('test'));
+    });
+
+    it('undefined check', function () {
+        var a;
+        cache.set('test', a);
+
+        strictEqual(null, cache.get('test'));
+    });
+
     it('object check', function () {
         var result;
         var json = {
