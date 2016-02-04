@@ -217,6 +217,10 @@ npm run test-cov
 
 ## Changelog
 
+### 0.2.1
+
+Return Value Type Repair `function` when the value is, the change from the `undefined` to `null`~
+
 ### 0.2.0
 
 Add `options.md5key` parameter is used to set whether to use md5 named cache file name

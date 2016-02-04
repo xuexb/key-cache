@@ -219,6 +219,10 @@ npm run test-cov
 
 ## 更新日志
 
+### 0.2.1
+
+修复当参数为`function`时返回值的类型，从`undefined`改成`null`~
+
 ### 0.2.0
 
 添加`options.md5key`参数，用来配置是否使用`md5`方式命名缓存文件名

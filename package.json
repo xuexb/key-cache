@@ -1,6 +1,6 @@
 {
   "name": "key-cache",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Storing data in the form of key into the file",
   "main": "lib/main.js",
   "scripts": {
