@@ -1,8 +1,8 @@
 node_modules/
 /.cache/
 /coverage/
-.travis.yml
-appveyor.yml
-.fecsrc
+/.travis.yml
+/appveyor.yml
+/.fecsrc
 /test/
 /release.sh

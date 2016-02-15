@@ -217,6 +217,11 @@ npm run test-cov
 
 ## Changelog
 
+### 0.2.3
+
+* Modify `precommit` to `prepush`
+* Add [release.sh](release.sh), refer [vue](https://github.com/vuejs/vue/blob/dev/build/release.sh)
+
 ### 0.2.1
 
 Return Value Type Repair `function` when the value is, the change from the `undefined` to `null`~

@@ -219,6 +219,11 @@ npm run test-cov
 
 ## 更新日志
 
+### 0.2.3
+
+* 修改 `precommit` 为 `prepush`
+* 添加 [release.sh](release.sh), 来自 [vue](https://github.com/vuejs/vue/blob/dev/build/release.sh)
+
 ### 0.2.1
 
 修复当参数为`function`时返回值的类型，从`undefined`改成`null`~
