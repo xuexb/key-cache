@@ -1,6 +1,6 @@
 {
   "name": "key-cache",
-  "version": "0.2.1",
+  "version": "1.1.1",
   "description": "Storing data in the form of key into the file",
   "main": "lib/main.js",
   "scripts": {
@@ -15,7 +15,9 @@
     "hook-install": "precommit install",
     "hook-remove": "precommit remove"
   },
-  "precommit" : ["npm run precommit"],
+  "precommit": [
+    "npm run precommit"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/xuexb/key-cache.git"
