@@ -13,7 +13,8 @@
     "test": "mocha --reporter spec --timeout 5000 --recursive test/",
     "precommit": "npm run check",
     "hook-install": "precommit install",
-    "hook-remove": "precommit remove"
+    "hook-remove": "precommit remove",
+    "release": "bash release.sh"
   },
   "precommit": [
     "npm run precommit"
