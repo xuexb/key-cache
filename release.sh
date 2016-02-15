@@ -13,7 +13,6 @@ then
     echo "Releasing $VERSION ..."
 
     npm run compile
-    npm run check
     npm run test
 
     git add -A
