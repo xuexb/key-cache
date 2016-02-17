@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "babel": "5.8.21",
-    "fecs": "*",
+    "fecs": "0.6.3-beta.2",
     "istanbul": "^0.4.1",
     "mocha": "^2.3.4",
     "prepush": "*"
