@@ -2,7 +2,7 @@
 
 [English documents](./README.md)
 
-以key的形式储存数据到文件内
+以`key`的形式储存数据到文件内
 
 ---
 
