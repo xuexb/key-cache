@@ -4,8 +4,6 @@
  * @email fe.xiaowu@gmail.com
  */
 
-'use strict';
-
 import {existsSync, writeFileSync, readFileSync, unlinkSync} from 'fs';
 import {mkdirsSync, emptyDirSync} from 'fs-extra';
 import {resolve} from 'path';
