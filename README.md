@@ -221,6 +221,10 @@ npm run test-cov
 
 ## Changelog
 
+### 0.2.6
+
+[babel 6.x](https://babeljs.io/) upgrade to compile
+
 ### 0.2.3
 
 * Modify `precommit` to `prepush`

@@ -221,6 +221,10 @@ npm run test-cov
 
 ## 更新日志
 
+### 0.2.6
+
+升级为[babel 6.x](https://babeljs.io/)编译
+
 ### 0.2.3
 
 * 修改 `precommit` 为 `prepush`
