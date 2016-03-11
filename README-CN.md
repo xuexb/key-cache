@@ -200,6 +200,8 @@ cache.set('中文', 1); // => filename is 中文.json
 
 ## 参与开发
 
+> 使用es6开发，依赖[babel 6.x](https://babeljs.io/)编译
+
 ```js
 // 运行编译，将es6代码从 src 编译到 lib 目录
 npm run compile

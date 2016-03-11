@@ -198,6 +198,8 @@ cache.set('中文', 1); // => filename is 中文.json
 
 ## Develop
 
+> Use es6 development, compiler-dependent [babel 6.x](https://babeljs.io/)
+
 ```js
 // Run the compiler, the es6 code from the compiled into lib in src
 npm run compile
