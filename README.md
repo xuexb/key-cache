@@ -11,6 +11,8 @@ Storing data in the form of key into the file
 [![Linux Build](https://img.shields.io/travis/xuexb/key-cache/master.svg?label=linux)](https://travis-ci.org/xuexb/key-cache)
 [![Windows Build](https://img.shields.io/appveyor/ci/xuexb/key-cache/master.svg?label=windows)](https://ci.appveyor.com/project/xuexb/key-cache)
 [![Test Coverage](https://img.shields.io/coveralls/xuexb/key-cache/master.svg)](https://coveralls.io/r/xuexb/key-cache?branch=master)
+[![Dependencies](https://img.shields.io/david/xuexb/key-cache.svg?style=flat)](https://david-dm.org/xuexb/key-cache)
+[![DevDependencies](https://img.shields.io/david/dev/xuexb/key-cache.svg?style=flat)](https://david-dm.org/xuexb/key-cache)
 
 ## Install
 
@@ -198,6 +200,8 @@ cache.set('中文', 1); // => filename is 中文.json
 
 ## Develop
 
+> Use es6 development, compiler-dependent [babel 6.x](https://babeljs.io/)
+
 ```js
 // Run the compiler, the es6 code from the compiled into lib in src
 npm run compile
@@ -216,6 +220,10 @@ npm run test-cov
 ```
 
 ## Changelog
+
+### 0.2.6
+
+[babel 6.x](https://babeljs.io/) upgrade to compile
 
 ### 0.2.3
 

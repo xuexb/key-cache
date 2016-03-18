@@ -2,7 +2,7 @@
 
 [English documents](./README.md)
 
-以key的形式储存数据到文件内
+以`key`的形式储存数据到文件内
 
 ---
 
@@ -200,6 +200,8 @@ cache.set('中文', 1); // => filename is 中文.json
 
 ## 参与开发
 
+> 使用es6开发，依赖[babel 6.x](https://babeljs.io/)编译
+
 ```js
 // 运行编译，将es6代码从 src 编译到 lib 目录
 npm run compile
@@ -218,6 +220,10 @@ npm run test-cov
 ```
 
 ## 更新日志
+
+### 0.2.6
+
+升级为[babel 6.x](https://babeljs.io/)编译
 
 ### 0.2.3
 

@@ -15,9 +15,9 @@ then
     npm run compile
     npm run test
 
-    git add -A
-    git commit -m "[build] $VERSION"
-    npm version $VERSION --message "[release] $VERSION"
+    # git add -A
+    # git commit -m "[build] $VERSION"
+    npm version $VERSION --message "release: $VERSION"
 
     git push origin refs/tags/v$VERSION
     git push
