@@ -54,7 +54,8 @@
     "fecs": ">=0.6.3",
     "istanbul": ">=1.0.0-alpha.2",
     "mocha": ">=2.4.5",
-    "prepush": ">=3.1.8"
+    "prepush": ">=3.1.8",
+    "should": ">=8.2.2"
   },
   "engines": {
     "node": ">= 0.12.0"
