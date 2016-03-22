@@ -4,61 +4,46 @@
  * @email fe.xiaowu@gmail.com
  */
 
-'use strict';
+import should from 'should';
+import {existsSync, readFileSync, writeFileSync, readdirSync} from 'fs';
+import {removeSync, mkdirpSync} from 'fs-extra';
+import {resolve, dirname} from 'path';
 
-var KeyCache = require('../');
-var assert = require('assert');
-var strictEqual = assert.strictEqual;
-var fs = require('fs');
-var path = require('path');
-var extra = require('fs-extra');
+import KeyCache from '../src/main';
+import types from './types';
 
-describe('key-cache', function () {
-    var cache = new KeyCache();
+describe('key-cache', () => {
+    let cache = new KeyCache();
 
     // 每次执行完成后清空缓存
-    afterEach(function () {
+    afterEach(() => {
         cache.remove();
+        removeSync('./test/temp');
     });
 
-    it('new', function () {
-        try {
-            var keycache = KeyCache;
-            keycache();
-            strictEqual(true, false);
-        }
-        catch (e) {
-            strictEqual(true, true);
-        }
+    it('new', () => {
+        should.throws(
+            () => {
+                let keyCache = KeyCache;
+                keyCache();
+            }
+        );
     });
 
-    it('new KeyCache() check option', function () {
-        var flag = true;
-
-        try {
-            new KeyCache({});
-            new KeyCache();
-            new KeyCache(false);
-            new KeyCache('');
-            new KeyCache(null);
-            new KeyCache(0);
-            new KeyCache('str');
-        }
-        catch (e) {
-            flag = false;
-        }
-
-        strictEqual(true, flag);
+    it('new KeyCache() check option', () => {
+        should.doesNotThrow(() => {
+            types.forEach(key => new KeyCache(key));
+        }, 'option type error');
     });
 
-    it('options.md5key', function () {
-        var filepath = './test/temp/.' + Date.now();
-        var cache2 = new KeyCache({
+    it('options.md5key', () => {
+        let filepath = './test/temp/.' + Date.now();
+        let cache2 = new KeyCache({
             dir: filepath,
             md5key: false
         });
 
-        var arr = [
+        let arr = [
             '中文',
             'en',
             '空格   ',
@@ -70,131 +55,125 @@ describe('key-cache', function () {
             '1234566'
         ];
 
-        arr.forEach(function (val, index) {
+        // 设置值
+        arr.forEach((val, index) => {
             cache2.set(val, index);
         });
 
-        strictEqual(true, fs.existsSync(filepath));
-        strictEqual(arr.length, fs.readdirSync(filepath).length);
+        // 验证目录是否存在
+        existsSync(filepath).should.be.true();
 
-        arr.forEach(function (val, index) {
-            strictEqual(index, cache2.get(val));
+        // 目录里的文件必须是数组的长度
+        readdirSync(filepath).length.should.equal(arr.length);
+
+        // 验证获取
+        arr.forEach((val, index) => {
+            index.should.equal(cache2.get(val));
         });
-
-        // 删除目录
-        extra.removeSync('./test/temp');
     });
 
     // 判断只要写入文件就算成功
-    it('options.dir', function () {
-        var filepath = './test/temp/.' + Date.now();
-        var cache2 = new KeyCache({
+    it('options.dir', () => {
+        let filepath = './test/temp/.' + Date.now();
+        let cache2 = new KeyCache({
             dir: filepath
         });
 
         // 写入文件
         cache2.set('test', 1);
 
-        // 目录必须存在，并且里面文件必须有1个
-        strictEqual(true, fs.existsSync(filepath) && fs.readdirSync(filepath).length === 1);
+        // 必须目录存在
+        existsSync(filepath).should.be.true();
 
-        // 删除目录
-        extra.removeSync('./test/temp');
+        // 必须有1个文件
+        readdirSync(filepath).length.should.equal(1);
     });
 
-    it('options.timeout', function (done) {
-        var cache2 = new KeyCache({
-            timeout: 2
+    it('options.timeout', done => {
+        let cache2 = new KeyCache({
+            timeout: 0.1
         });
 
         cache2.set('timeout', 1);
 
-        strictEqual(1, cache2.get('timeout'));
+        cache2.get('timeout').should.equal(1);
 
-        // 过期时间为1m，但执行会有延迟的
-        setTimeout(function () {
-            strictEqual(1, cache2.get('timeout'));
-        }, 500);
+        setTimeout(() => {
+            cache2.get('timeout').should.equal(1);
+        }, 90);
 
-        setTimeout(function () {
-            strictEqual(null, cache2.get('timeout'));
+        setTimeout(() => {
+            (cache2.get('timeout') === null).should.be.true();
             done();
-        }, 2500);
+        }, 110);
     });
 
-    it('get(key)', function () {
-        cache.set('1', 1);
-        strictEqual(1, cache.get('1'));
-        strictEqual(null, cache.get(null));
+    it('get(key)', () => {
+        cache.set('get(key)', 1);
+        cache.get('get(key)').should.equal(1);
+
+        types.forEach(key => {
+            (cache.get(key) === null).should.be.true();
+        });
     });
 
-    it('return get(errkey)', function () {
-        strictEqual(null, cache.get('xxxxxx'));
-    });
+    it('get json parse error', () => {
+        let cache = new KeyCache();
 
-    it('get json parse error', function () {
-        var cache = new KeyCache();
+        let filepath = resolve(__dirname, './temp/notime.json');
 
-        var filepath = path.resolve(__dirname, './notime.json');
-        fs.writeFileSync(filepath, JSON.stringify({
+        mkdirpSync(dirname(filepath));
+
+        // 写个假的
+        writeFileSync(filepath, JSON.stringify({
             name: 'key-cache'
         }));
 
         // 重写获取路径
-        cache._getFilePath = function () {
-            return filepath;
-        };
+        cache._getFilePath = () => filepath;
 
-        strictEqual(null, cache.get());
-
-        // 删除刚才写入的文件
-        extra.removeSync(filepath);
+        (cache.get() === null).should.be.true();
     });
 
-    it('get json error', function () {
-        var cache = new KeyCache();
+    it('get json error', () => {
+        let cache = new KeyCache();
+        let filepath = resolve('./test/temp/parseerror.json');
 
-        var filepath = path.resolve(__dirname, './parseerror.json');
-        fs.writeFileSync(filepath, '{');
+        mkdirpSync(dirname(filepath));
+
+        // 写入错误文件
+        writeFileSync(filepath, '{');
 
         // 重写获取路径
-        cache._getFilePath = function () {
-            return filepath;
-        };
+        cache._getFilePath = () => filepath;
 
-        strictEqual(null, cache.get());
-
-        // 删除刚才写入的文件
-        extra.removeSync(filepath);
+        (cache.get() === null).should.be.true();
     });
 
     // 判断只要写入文件就算成功
-    it('set(key, value)', function () {
-        var filepath;
+    it('set(key, value)', () => {
+        let filepath;
 
         // 写入文件
         cache.set('test', 1);
 
-        strictEqual(1, cache.get('test'));
+        cache.get('test').should.equal(1);
 
         // 使用内置方法读取出来路径
         filepath = cache._getFilePath('test');
 
         // 文件必须存在
-        strictEqual(true, fs.existsSync(filepath));
+        existsSync(filepath).should.be.true();
 
         // 查看是否能正常的解析
-        try {
-            JSON.parse(fs.readFileSync(filepath).toString());
-        }
-        catch (e) {
-            strictEqual(true, false);
-        }
+        should.doesNotThrow(() => {
+            JSON.parse(readFileSync(filepath).toString());
+        }, 'parse json file error');
     });
 
     // 判断只要写入文件就算成功
-    it('set(key, value, {dir: path})', function () {
-        var filepath = './test/temp/.' + Date.now();
+    it('set(key, value, {dir: path})', () => {
+        let filepath = './test/temp/.' + Date.now();
 
         // 写入文件
         cache.set('test', 1, {
@@ -202,45 +181,38 @@ describe('key-cache', function () {
         });
 
         // 目录必须存在，并且里面文件必须有1个
-        strictEqual(true, fs.existsSync(filepath) && fs.readdirSync(filepath).length === 1);
-
-        // 删除目录
-        extra.removeSync('./test/temp');
+        existsSync(filepath).should.be.true();
+        readdirSync(filepath).length.should.equal(1);
     });
 
-    it('set(key, value, {timeout: ""})', function (done) {
+    it('set(key, value, {timeout: ""})', (done) => {
         cache.set('test', 1, {
-            timeout: 1
+            timeout: 0.1
         });
 
-        strictEqual(1, cache.get('test'));
+        cache.get('test').should.equal(1);
 
         // 过期时间为1m，但执行会有延迟的
-        setTimeout(function () {
-            strictEqual(1, cache.get('test'));
-        }, 500);
+        setTimeout(() => {
+            cache.get('test').should.equal(1);
+        }, 90);
 
-        setTimeout(function () {
-            strictEqual(null, cache.get('test'));
+        setTimeout(() => {
+            (cache.get('test') === null).should.be.true();
             done();
-        }, 1001);
+        }, 110);
     });
 
-    it('return set()', function () {
-        strictEqual(cache, cache.set());
+    it('return set()', () => {
+        cache.set().should.equal(cache)
     });
 
-    it('return set(key)', function () {
-        strictEqual(cache, cache.set('key'));
-        strictEqual(cache, cache.set(true));
-        strictEqual(cache, cache.set(0));
-        strictEqual(cache, cache.set(null));
+    it('return set(key)', () => {
+        types.forEach(key => cache.set(key).should.equal(cache));
     });
 
-    it('return set(key, value)', function () {
-        strictEqual(cache, cache.set('key', 'value'));
-        strictEqual(cache, cache.set('key', false));
-        strictEqual(cache, cache.set('key', 0));
+    it('return set(key, value)', () => {
+        types.forEach(key => cache.set(key, key).should.equal(cache));
     });
 
     it('remove(key)', function () {
@@ -248,7 +220,7 @@ describe('key-cache', function () {
 
         cache.remove('aaa');
 
-        strictEqual(null, cache.get('aaa'));
+        (cache.get('aaa') === null).should.be.true();
     });
 
     it('remove()', function () {
@@ -256,27 +228,29 @@ describe('key-cache', function () {
         cache.set('bbb', 1);
         cache.set('ccc', 1);
 
+        readdirSync(cache.options.dir).length.should.equal(3);
+
         cache.remove();
 
-        strictEqual(0, fs.readdirSync(cache.options.dir).length);
+        readdirSync(cache.options.dir).length.should.equal(0);
     });
 
     it('return remove()', function () {
-        strictEqual(cache, cache.remove());
+        cache.remove().should.equal(cache);
     });
 
     it('return remove(key)', function () {
-        strictEqual(cache, cache.remove('not file'));
+        types.forEach(key => cache.remove(key).should.equal(cache));
 
         cache.set('key', 1);
-        strictEqual(cache, cache.remove('key'));
+        cache.remove('key').should.equal(cache);
     });
 
     it('timeout remove file', function (done) {
-        var filepath = './test/temp/.' + Date.now();
-        var cache2 = new KeyCache({
+        let filepath = './test/temp/.' + Date.now();
+        let cache2 = new KeyCache({
             dir: filepath,
-            timeout: 1
+            timeout: 0.1
         });
 
         // 写入文件
@@ -287,56 +261,52 @@ describe('key-cache', function () {
             cache2.get('test');
 
             // 验证文件为空
-            strictEqual(0, fs.readdirSync(path.resolve(filepath)).length);
+            readdirSync(resolve(filepath)).length.should.equal(0);
 
             done();
-
-            // 删除目录
-            extra.removeSync('./test/temp');
-        }, 1500);
+        }, 200);
     });
 
     it('string check', function () {
         cache.set('test', '1');
-
-        strictEqual('string', typeof cache.get('test'));
-        strictEqual('1', cache.get('test'));
+        cache.get('test').should.equal('1');
+        cache.get('test').should.be.type('string');
     });
 
     it('boolean check', function () {
         cache.set('true', true);
         cache.set('false', false);
 
-        strictEqual('boolean', typeof cache.get('true'));
-        strictEqual(false, cache.get('false'));
-        strictEqual(true, cache.get('true'));
+        cache.get('true').should.be.type('boolean');
+        cache.get('true').should.equal(true);
+        cache.get('false').should.equal(false);
     });
 
     it('number check', function () {
         cache.set('test', 1);
         cache.set('0', 0);
 
-        strictEqual('number', typeof cache.get('test'));
-        strictEqual(1, cache.get('test'));
-        strictEqual(0, cache.get('0'));
+        cache.get('test').should.be.type('number');
+        cache.get('test').should.equal(1);
+        cache.get('0').should.equal(0);
     });
 
     it('function check', function () {
         cache.set('test', function () {});
 
-        strictEqual(null, cache.get('test'));
+        (cache.get('test') === null).should.be.true();
     });
 
     it('undefined check', function () {
         var a;
         cache.set('test', a);
 
-        strictEqual(null, cache.get('test'));
+        (cache.get('test') === null).should.be.true();
     });
 
     it('object check', function () {
-        var result;
-        var json = {
+        let result;
+        let json = {
             status: 'ok',
             code: 0,
             flag: true,
@@ -349,13 +319,14 @@ describe('key-cache', function () {
 
         result = cache.get('test');
 
-        assert.deepEqual(json, result);
+        result.should.eql(json);
 
-        strictEqual(json.status, result.status);
-        strictEqual(json.code, result.code);
-        strictEqual(json.flag, result.flag);
+        result.status.should.equal(json.status);
+        result.code.should.equal(json.code);
+        result.flag.should.equal(json.flag);
+        result.array.should.eql(json.array);
 
         cache.set('null', null);
-        strictEqual(null, cache.get('null'));
+        (cache.get('null') === null).should.be.true();
     });
 });
