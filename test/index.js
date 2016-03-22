@@ -91,7 +91,7 @@ describe('key-cache', () => {
 
     it('options.timeout', done => {
         let cache2 = new KeyCache({
-            timeout: 0.1
+            timeout: 1
         });
 
         cache2.set('timeout', 1);
@@ -100,12 +100,12 @@ describe('key-cache', () => {
 
         setTimeout(() => {
             cache2.get('timeout').should.equal(1);
-        }, 90);
+        }, 100);
 
         setTimeout(() => {
             (cache2.get('timeout') === null).should.be.true();
             done();
-        }, 110);
+        }, 1500);
     });
 
     it('get(key)', () => {
@@ -187,7 +187,7 @@ describe('key-cache', () => {
 
     it('set(key, value, {timeout: ""})', (done) => {
         cache.set('test', 1, {
-            timeout: 0.1
+            timeout: 1
         });
 
         cache.get('test').should.equal(1);
@@ -195,12 +195,12 @@ describe('key-cache', () => {
         // 过期时间为1m，但执行会有延迟的
         setTimeout(() => {
             cache.get('test').should.equal(1);
-        }, 90);
+        }, 100);
 
         setTimeout(() => {
             (cache.get('test') === null).should.be.true();
             done();
-        }, 110);
+        }, 1500);
     });
 
     it('return set()', () => {
@@ -250,7 +250,7 @@ describe('key-cache', () => {
         let filepath = './test/temp/.' + Date.now();
         let cache2 = new KeyCache({
             dir: filepath,
-            timeout: 0.1
+            timeout: 1
         });
 
         // 写入文件
@@ -264,7 +264,7 @@ describe('key-cache', () => {
             readdirSync(resolve(filepath)).length.should.equal(0);
 
             done();
-        }, 200);
+        }, 1500);
     });
 
     it('string check', function () {
