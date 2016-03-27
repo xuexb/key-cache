@@ -225,6 +225,10 @@ npm run test-cov
 
 ## 更新日志
 
+### 0.2.7
+
+更新测试用例为es6
+
 ### 0.2.6
 
 升级为[babel 6.x](https://babeljs.io/)编译

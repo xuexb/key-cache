@@ -222,6 +222,10 @@ npm run test-cov
 
 ## Changelog
 
+### 0.2.7
+
+Update test case to ES6
+
 ### 0.2.6
 
 [babel 6.x](https://babeljs.io/) upgrade to compile
