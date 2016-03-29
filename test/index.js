@@ -185,7 +185,7 @@ describe('key-cache', () => {
         readdirSync(filepath).length.should.equal(1);
     });
 
-    it('set(key, value, {timeout: ""})', (done) => {
+    it('set(key, value, {timeout: ""})', done => {
         cache.set('test', 1, {
             timeout: 1
         });
@@ -204,7 +204,7 @@ describe('key-cache', () => {
     });
 
     it('return set()', () => {
-        cache.set().should.equal(cache)
+        cache.set().should.equal(cache);
     });
 
     it('return set(key)', () => {
@@ -215,7 +215,7 @@ describe('key-cache', () => {
         types.forEach(key => cache.set(key, key).should.equal(cache));
     });
 
-    it('remove(key)', function () {
+    it('remove(key)', () => {
         cache.set('aaa', 1);
 
         cache.remove('aaa');
@@ -223,7 +223,7 @@ describe('key-cache', () => {
         (cache.get('aaa') === null).should.be.true();
     });
 
-    it('remove()', function () {
+    it('remove()', () => {
         cache.set('aaa', 1);
         cache.set('bbb', 1);
         cache.set('ccc', 1);
@@ -235,18 +235,18 @@ describe('key-cache', () => {
         readdirSync(cache.options.dir).length.should.equal(0);
     });
 
-    it('return remove()', function () {
+    it('return remove()', () => {
         cache.remove().should.equal(cache);
     });
 
-    it('return remove(key)', function () {
+    it('return remove(key)', () => {
         types.forEach(key => cache.remove(key).should.equal(cache));
 
         cache.set('key', 1);
         cache.remove('key').should.equal(cache);
     });
 
-    it('timeout remove file', function (done) {
+    it('timeout remove file', done => {
         let filepath = './test/temp/.' + Date.now();
         let cache2 = new KeyCache({
             dir: filepath,
@@ -256,7 +256,7 @@ describe('key-cache', () => {
         // 写入文件
         cache2.set('test', 1);
 
-        setTimeout(function () {
+        setTimeout(() => {
             // 得先获取下才可以
             cache2.get('test');
 
@@ -267,13 +267,13 @@ describe('key-cache', () => {
         }, 1500);
     });
 
-    it('string check', function () {
+    it('string check', () => {
         cache.set('test', '1');
         cache.get('test').should.equal('1');
         cache.get('test').should.be.type('string');
     });
 
-    it('boolean check', function () {
+    it('boolean check', () => {
         cache.set('true', true);
         cache.set('false', false);
 
@@ -282,7 +282,7 @@ describe('key-cache', () => {
         cache.get('false').should.equal(false);
     });
 
-    it('number check', function () {
+    it('number check', () => {
         cache.set('test', 1);
         cache.set('0', 0);
 
@@ -291,20 +291,20 @@ describe('key-cache', () => {
         cache.get('0').should.equal(0);
     });
 
-    it('function check', function () {
-        cache.set('test', function () {});
+    it('function check', () => {
+        cache.set('test', () => {});
 
         (cache.get('test') === null).should.be.true();
     });
 
-    it('undefined check', function () {
-        var a;
+    it('undefined check', () => {
+        let a;
         cache.set('test', a);
 
         (cache.get('test') === null).should.be.true();
     });
 
-    it('object check', function () {
+    it('object check', () => {
         let result;
         let json = {
             status: 'ok',
