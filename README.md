@@ -7,8 +7,8 @@ Storing data in the form of key into the file
 ---
 
 [![code style fecs](https://img.shields.io/badge/code%20style-fecs-brightgreen.svg)](https://github.com/ecomfe/fecs)
-[![NPM Version](https://img.shields.io/npm/v/key-cache.svg)](https://npmjs.org/package/key-cache)
-[![NPM Downloads](https://img.shields.io/npm/dm/key-cache.svg)](https://npmjs.org/package/key-cache)
+[![NPM Version](https://img.shields.io/npm/v/key-cache.svg)](https://www.npmjs.com/package/key-cache)
+[![NPM Downloads](https://img.shields.io/npm/dm/key-cache.svg)](https://www.npmjs.com/package/key-cache)
 [![Linux Build](https://img.shields.io/travis/xuexb/key-cache/master.svg?label=linux)](https://travis-ci.org/xuexb/key-cache)
 [![Windows Build](https://img.shields.io/appveyor/ci/xuexb/key-cache/master.svg?label=windows)](https://ci.appveyor.com/project/xuexb/key-cache)
 [![Test Coverage](https://img.shields.io/coveralls/xuexb/key-cache/master.svg)](https://coveralls.io/r/xuexb/key-cache?branch=master)
