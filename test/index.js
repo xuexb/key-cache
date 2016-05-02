@@ -5,9 +5,9 @@
  */
 
 import should from 'should';
-import {existsSync, readFileSync, writeFileSync, readdirSync} from 'fs';
-import {removeSync, mkdirpSync} from 'fs-extra';
-import {resolve, dirname} from 'path';
+import {existsSync, readFileSync, readdirSync} from 'fs';
+import {resolve} from 'path';
+import mock from 'mock-fs';
 
 import KeyCache from '../src/main';
 import types from './types';
@@ -18,7 +18,6 @@ describe('key-cache', () => {
     // 每次执行完成后清空缓存
     afterEach(() => {
         cache.remove();
-        removeSync('./test/temp');
     });
 
     it('new', () => {
@@ -91,21 +90,21 @@ describe('key-cache', () => {
 
     it('options.timeout', done => {
         let cache2 = new KeyCache({
-            timeout: 1
+            timeout: .5
         });
 
         cache2.set('timeout', 1);
 
-        cache2.get('timeout').should.equal(1);
+        (cache2.get('timeout') === 1).should.be.true();
 
         setTimeout(() => {
-            cache2.get('timeout').should.equal(1);
-        }, 100);
+            (cache2.get('timeout') === 1).should.be.true();
+        }, 400);
 
         setTimeout(() => {
             (cache2.get('timeout') === null).should.be.true();
             done();
-        }, 1500);
+        }, 1000);
     });
 
     it('get(key)', () => {
@@ -119,15 +118,11 @@ describe('key-cache', () => {
 
     it('get json parse error', () => {
         let cache = new KeyCache();
+        let filepath = './test/temp/notime.json';
 
-        let filepath = resolve(__dirname, './temp/notime.json');
-
-        mkdirpSync(dirname(filepath));
-
-        // 写个假的
-        writeFileSync(filepath, JSON.stringify({
-            name: 'key-cache'
-        }));
+        mock({
+            filepath: '{"name": "key-cache"}'
+        });
 
         // 重写获取路径
         cache._getFilePath = () => filepath;
@@ -137,12 +132,11 @@ describe('key-cache', () => {
 
     it('get json error', () => {
         let cache = new KeyCache();
-        let filepath = resolve('./test/temp/parseerror.json');
+        let filepath = './test/temp/parseerror.json';
 
-        mkdirpSync(dirname(filepath));
-
-        // 写入错误文件
-        writeFileSync(filepath, '{');
+        mock({
+            filepath: '{'
+        });
 
         // 重写获取路径
         cache._getFilePath = () => filepath;
@@ -292,7 +286,7 @@ describe('key-cache', () => {
     });
 
     it('function check', () => {
-        cache.set('test', () => {});
+        cache.set('test', function () {});
 
         (cache.get('test') === null).should.be.true();
     });
