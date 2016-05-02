@@ -222,6 +222,10 @@ npm run test-cov
 
 ## Changelog
 
+### 0.2.8
+
+Add nodejs 6.x test environment
+
 ### 0.2.7
 
 Update test case to ES6
