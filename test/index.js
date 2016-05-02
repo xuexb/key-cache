@@ -18,6 +18,7 @@ describe('key-cache', () => {
     // 每次执行完成后清空缓存
     afterEach(() => {
         cache.remove();
+        mock.restore();
     });
 
     it('new', () => {
