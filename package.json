@@ -15,6 +15,13 @@
     "hook-remove": "prepush remove",
     "release": "bash release.sh"
   },
+  "keywords": [
+    "cache",
+    "filecache",
+    "file",
+    "json cache",
+    "flat-file"
+  ],
   "prepush": [
     "npm run check"
   ],
