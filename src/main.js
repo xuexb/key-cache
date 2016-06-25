@@ -187,7 +187,7 @@ export default class KeyCache {
         let filepath = this._getFilePath(key);
 
         // 如果文件不存在
-        if (!existsSync(filepath)) {
+        if (!fileExists(filepath)) {
             return this;
         }
 
