@@ -222,6 +222,10 @@ npm run test-cov
 
 ## Changelog
 
+### 0.2.9
+
+Modify api: `fs.existsSync`=>`fs.statSync`
+
 ### 0.2.8
 
 Add nodejs 6.x test environment
