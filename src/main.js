@@ -9,16 +9,21 @@ import {mkdirsSync, emptyDirSync} from 'fs-extra';
 import {resolve} from 'path';
 import {createHash} from 'crypto';
 
-let fileExists = (filePath) => {
-    let isExists;
+/**
+ * 检查文件是否存在
+ *
+ * @inner
+ * @param  {string} filePath 文件路径
+ *
+ * @return {boolean}          是否存在
+ */
+let fileExists = filePath => {
     try {
-        let stat = statSync(filePath);
-        isExists = stat.isFile();
+        return statSync(filePath).isFile();
     }
     catch (e) {
-        isExists = false;
+        return false;
     }
-    return isExists;
 };
 
 export default class KeyCache {
