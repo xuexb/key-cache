@@ -222,6 +222,10 @@ npm run test-cov
 
 ## Changelog
 
+### 0.3.0
+
+stand by `node 4.x+`
+
 ### 0.2.9
 
 Modify api: `fs.existsSync`=>`fs.statSync`

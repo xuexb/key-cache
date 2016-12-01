@@ -225,6 +225,10 @@ npm run test-cov
 
 ## 更新日志
 
+### 0.3.0
+
+最低支持`node 4.x+`
+
 ### 0.2.9
 
 修改api：`fs.existsSync`=>`fs.statSync`
