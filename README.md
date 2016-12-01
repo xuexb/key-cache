@@ -17,7 +17,7 @@ Storing data in the form of key into the file
 
 ## Install
 
-> requires node 0.12+
+> requires node 4+
 
 ```bash
 npm install key-cache --save
