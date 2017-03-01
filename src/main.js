@@ -83,7 +83,7 @@ export default class KeyCache {
         let data = {
             __time: null,
             __result: value,
-            key
+            __key: key
         };
 
         // 如果有过期时间则记录，否则忽略
@@ -137,6 +137,11 @@ export default class KeyCache {
         return  resolve(options.dir, filename + '.json');
     }
 
+    /**
+     * 获取所有缓存数据
+     *
+     * @return {Object} {key: value, ...}
+     */
     getAll() {
         let dir = resolve(this.options.dir);
 
@@ -152,8 +157,8 @@ export default class KeyCache {
                 throws: false
             }) || {};
 
-            if (result.key) {
-                data[result.key] = this.get(result.key);
+            if (result.__key) {
+                data[result.__key] = this.get(result.__key);
             }
         });
 
