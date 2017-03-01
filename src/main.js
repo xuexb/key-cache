@@ -4,8 +4,8 @@
  * @email fe.xiaowu@gmail.com
  */
 
-import {statSync, writeFileSync, readFileSync, unlinkSync} from 'fs';
-import {mkdirsSync, emptyDirSync} from 'fs-extra';
+import {statSync, writeFileSync, readFileSync, unlinkSync, readdirSync} from 'fs';
+import {mkdirsSync, emptyDirSync, readJsonSync} from 'fs-extra';
 import {resolve} from 'path';
 import {createHash} from 'crypto';
 
@@ -14,12 +14,13 @@ import {createHash} from 'crypto';
  *
  * @inner
  * @param  {string} filePath 文件路径
+ * @param {string} [type=file] 检测类型
  *
  * @return {boolean}          是否存在
  */
-let fileExists = filePath => {
+let exists = (filePath, type = 'file') => {
     try {
-        return statSync(filePath).isFile();
+        return type === 'file' ? statSync(filePath).isFile() : statSync(filePath).isDirectory();
     }
     catch (e) {
         return false;
@@ -81,7 +82,8 @@ export default class KeyCache {
 
         let data = {
             __time: null,
-            __result: value
+            __result: value,
+            key
         };
 
         // 如果有过期时间则记录，否则忽略
@@ -135,6 +137,29 @@ export default class KeyCache {
         return  resolve(options.dir, filename + '.json');
     }
 
+    getAll() {
+        let dir = resolve(this.options.dir);
+
+        // 如果目录不存在
+        if (!exists(dir, 'dir')) {
+            return [];
+        }
+
+        let data = {};
+
+        readdirSync(dir).map(filename => {
+            let result = readJsonSync(resolve(dir, filename), {
+                throws: false
+            }) || {};
+
+            if (result.key) {
+                data[result.key] = this.get(result.key);
+            }
+        });
+
+        return data;
+    }
+
     /**
      * 获取缓存
      *
@@ -146,7 +171,7 @@ export default class KeyCache {
         let filepath = this._getFilePath(key);
 
         // 如果文件不存在
-        if (!fileExists(filepath)) {
+        if (!exists(filepath)) {
             return null;
         }
 
@@ -192,7 +217,7 @@ export default class KeyCache {
         let filepath = this._getFilePath(key);
 
         // 如果文件不存在
-        if (!fileExists(filepath)) {
+        if (!exists(filepath)) {
             return this;
         }
 
