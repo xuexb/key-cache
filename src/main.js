@@ -4,8 +4,8 @@
  * @email fe.xiaowu@gmail.com
  */
 
-import {statSync, writeFileSync, readFileSync, unlinkSync, readdirSync} from 'fs';
-import {mkdirsSync, emptyDirSync, readJsonSync} from 'fs-extra';
+import {statSync, writeFileSync, readdirSync} from 'fs';
+import {mkdirsSync, emptyDirSync, readJsonSync, removeSync} from 'fs-extra';
 import {resolve} from 'path';
 import {createHash} from 'crypto';
 
@@ -180,14 +180,10 @@ export default class KeyCache {
             return null;
         }
 
-        let filedata = readFileSync(filepath).toString();
+        let filedata = readJsonSync(filepath, {
+            throws: false
+        }) || {};
 
-        try {
-            filedata = JSON.parse(filedata);
-        }
-        catch (e) {
-            return null;
-        }
 
         // 如果没有时间就不是key-cache设置的，则忽略
         if (filedata.__time === undefined) {
@@ -227,7 +223,7 @@ export default class KeyCache {
         }
 
         // 删除文件
-        unlinkSync(filepath);
+        removeSync(filepath);
 
         return this;
     }
