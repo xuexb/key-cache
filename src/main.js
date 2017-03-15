@@ -147,7 +147,7 @@ export default class KeyCache {
 
         // 如果目录不存在
         if (!exists(dir, 'dir')) {
-            return [];
+            return {};
         }
 
         let data = {};
