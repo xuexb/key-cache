@@ -246,6 +246,37 @@ describe('key-cache', () => {
         cache.remove('key').should.equal(cache);
     });
 
+    it('getAll', () => {
+        let filepath = './test/temp/.' + Date.now();
+        let cache = new KeyCache({
+            dir: filepath
+        });
+
+        Object.keys(cache.getAll()).length.should.equal(0);
+
+        cache.set('a', 1);
+        Object.keys(cache.getAll()).length.should.equal(1);
+        cache.getAll().a.should.equal(1);
+
+        cache.set('b', 1);
+        Object.keys(cache.getAll()).length.should.equal(2);
+        cache.getAll().b.should.equal(1);
+
+        cache.remove();
+        Object.keys(cache.getAll()).length.should.equal(0);
+
+        writeFileSync(resolve(filepath, './a.json'), JSON.stringify({
+            test: 'ok'
+        }));
+        writeFileSync(resolve(filepath, './b.json'), 'test');
+        Object.keys(cache.getAll()).length.should.equal(0);
+
+        // 清空这个目录
+        removeSync(filepath);
+        Object.keys(cache.getAll()).length.should.equal(0);
+        (cache.getAll().length + '').should.equal('undefined');
+    });
+
     it('timeout remove file', done => {
         let filepath = './test/temp/.' + Date.now();
         let cache2 = new KeyCache({
