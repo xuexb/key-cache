@@ -222,6 +222,10 @@ npm run test-cov
 
 ## Changelog
 
+### 0.3.1
+
+add `.getAll()`
+
 ### 0.3.0
 
 stand by `node 4.x+`
