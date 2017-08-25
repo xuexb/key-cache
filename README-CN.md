@@ -13,8 +13,6 @@
 [![Windows Build](https://img.shields.io/appveyor/ci/xuexb/key-cache/master.svg?label=windows)](https://ci.appveyor.com/project/xuexb/key-cache)
 [![Test Coverage](https://img.shields.io/coveralls/xuexb/key-cache/master.svg)](https://coveralls.io/r/xuexb/key-cache?branch=master)
 [![Dependencies](https://img.shields.io/david/xuexb/key-cache.svg?style=flat)](https://david-dm.org/xuexb/key-cache)
-[![DevDependencies](https://img.shields.io/david/dev/xuexb/key-cache.svg?style=flat)](https://david-dm.org/xuexb/key-cache)
-
 
 ## 安装
 
