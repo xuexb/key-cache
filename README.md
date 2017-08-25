@@ -221,6 +221,10 @@ npm run test-cov
 
 ## Changelog
 
+### 1.0.0
+
+Add nodejs V8 test environment
+
 ### 0.3.1
 
 add `.getAll()`
